@@ -22,23 +22,30 @@ A static portfolio site with no build step. Black in dark mode, white in light m
 4. Under **Build and deployment**, set **Source** to **Deploy from a branch**, choose **main** and **/ (root)**, then save.
 5. Wait a minute or two. Your site appears at the address shown at the top of the Pages settings.
 
-## Interactions
+## What's on the page
 
-Everything is optional polish. The page reads fine without any of it.
-
-- **Hero spotlight.** With a mouse, the headline dims and a soft circle of full contrast follows the pointer, with a cobalt core. Touch devices and visitors who prefer reduced motion see the plain headline.
-- **Project rows.** Click a row to open its details. One row is open at a time. Rows invert black and white on hover and when open.
+- **Animated gradient hero.** Three soft orange, amber and red blobs drift slowly behind the headline over a fine grain. It is pure CSS, so it costs no JavaScript.
+- **Hero spotlight.** With a mouse, the headline dims and a circle of full contrast with an orange core follows the pointer.
+- **Rotating badge.** Circular text beside your links. Click it to jump to Contact. Hidden on small screens.
+- **Skills band.** A scrolling strip of your tools. It pauses on hover.
+- **Work.** Click a row to open its details. One row is open at a time.
+- **What I do.** Three services with orange icons. An orange rule draws across the top on hover.
+- **About.** Skills shown as chips.
+- **Experience.** A timeline with an orange dot on your current role.
+- **Kind words.** Testimonials you switch with the bars underneath.
+- **Contact.** A full-width orange panel. One click copies your email.
 - **Theme toggle.** A circular wipe grows from the button (Chrome, Edge and Safari; others switch instantly).
-- **Reading progress.** A thin line under the header fills as you scroll.
-- **Current section.** The matching nav link is underlined.
-- **Copy email.** One click copies your address, with a confirmation.
+- **Reading progress line and current-section link** in the header.
 
-To turn one off, delete its numbered block in `script.js`.
+Visitors who prefer reduced motion get the same page without the drifting gradient, spinning badge and scrolling band.
+
+To remove an interaction, delete its numbered block in `script.js`. To remove a section, delete its `<section>` in `index.html`.
 
 ## Make it yours
 
 Search for `EDIT` in `index.html`. Each spot that needs your content has a comment above it.
 
+- Edit the skills band, the three services and the testimonials (look for `EDIT`).
 - Replace `Your Name`, `Your City`, and `hello@example.com` everywhere they appear.
 - Update the GitHub and LinkedIn links in the hero.
 - Copy or delete `<li class="project">` blocks in the Work section. Give each a unique `id` (`project-5`, and so on) and match its button's `aria-controls`. The text under the row is what opens on click.
@@ -61,10 +68,13 @@ The palette lives in the first blocks of `styles.css`.
 | --- | --- | --- |
 | Page | `#ffffff` | `#000000` |
 | Text | `#000000` | `#ffffff` |
-| Accent (cobalt): links, focus, progress line, spotlight core, open-row icon | `#1a2cff` | `#8593ff` |
-| Accent 2 (ember): current section, current job, "Copied" message | `#c2410c` | `#ff9558` |
+| Orange accent (`--accent`): fills, lines, icons, gradient, contact panel | `#ff5a00` | `#ff6a1a` |
+| Orange for small text (`--accent-ink`) | `#c2410c` | `#ff8a3d` |
+| Blue complement (`--accent-2`): current nav section and copy confirmation | `#1a2cff` | `#8593ff` |
 
-Each accent has a light-mode and a dark-mode value so text stays readable on both backgrounds. To change one, edit `--accent` or `--accent-2` in the light block and in both dark blocks. `--inv-accent` is the accent shown on inverted (hovered or open) project rows, so set it to the other theme's `--accent`.
+The orange has a darker light-mode shade for small text so it stays readable on white. Text on orange fills is always black. `--inv-accent` is the orange shown on inverted (hovered or open) project rows, so set it to the shade that works on the opposite background. `--glow` controls how strong the hero gradient is.
+
+The blob colors are set in the `.b1`, `.b2` and `.b3` rules if you want a different mix.
 
 ## Files
 
@@ -73,4 +83,4 @@ Each accent has a light-mode and a dark-mode value so text stays readable on bot
 | `index.html` | Page content |
 | `styles.css` | Layout, type, and light and dark themes |
 | `script.js` | Theme toggle and footer year |
-| `favicon.svg` | Browser tab icon that switches with the system theme |
+| `favicon.svg` | Orange browser tab icon. Change the letter to your initial |

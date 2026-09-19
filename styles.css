@@ -14,12 +14,16 @@
   --inv-bg: #000000;
   --inv-fg: #ffffff;
   --inv-muted: #a3a3a3;
-  --dim: #8c8c8c;
+  --dim: #595959;
 
-  /* Accent pair: cobalt for anything you can act on, ember for "you are here" and status */
-  --accent: #1a2cff;
-  --accent-2: #c2410c;
-  --inv-accent: #8593ff; /* accent as seen on an inverted row */
+  /* Orange is the main accent. Blue is the small complement for "you are here" and status. */
+  --accent: #ff5a00;      /* fills, lines, icons */
+  --accent-ink: #c2410c;  /* orange used as small text on the page background */
+  --accent-2: #1a2cff;
+  --inv-accent: #ff7a1a;  /* orange as seen on an inverted (hovered or open) row */
+  --line-2: #bdbdbd;
+  --glow: 0.62;           /* strength of the hero gradient */
+  --grain: 0.09;
 
   --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
   --text: "Newsreader", Georgia, "Times New Roman", serif;
@@ -40,10 +44,14 @@
     --inv-bg: #ffffff;
     --inv-fg: #000000;
     --inv-muted: #525252;
-    --dim: #737373;
-    --accent: #8593ff;
-    --accent-2: #ff9558;
-    --inv-accent: #1a2cff;
+    --dim: #a3a3a3;
+    --accent: #ff6a1a;
+    --accent-ink: #ff8a3d;
+    --accent-2: #8593ff;
+    --inv-accent: #c2410c;
+    --line-2: #444444;
+    --glow: 0.58;
+  --grain: 0.2;
     color-scheme: dark;
   }
 }
@@ -56,10 +64,14 @@
   --inv-bg: #ffffff;
   --inv-fg: #000000;
   --inv-muted: #525252;
-  --dim: #737373;
-  --accent: #8593ff;
-  --accent-2: #ff9558;
-  --inv-accent: #1a2cff;
+  --dim: #a3a3a3;
+  --accent: #ff6a1a;
+  --accent-ink: #ff8a3d;
+  --accent-2: #8593ff;
+  --inv-accent: #c2410c;
+  --line-2: #444444;
+  --glow: 0.58;
+  --grain: 0.2;
   color-scheme: dark;
 }
 
@@ -102,18 +114,18 @@ a {
 }
 
 a:hover {
-  color: var(--accent);
+  color: var(--accent-ink);
   text-decoration-thickness: 0.14em;
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-ink);
   outline-offset: 3px;
 }
 
 ::selection {
   background: var(--accent);
-  color: var(--bg);
+  color: #000;
 }
 
 ul,
@@ -255,6 +267,9 @@ h3 {
    ========================================================================== */
 
 .hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   padding-block: clamp(3.5rem, 11vw, 8.5rem) clamp(3.5rem, 9vw, 7rem);
 }
 
@@ -268,7 +283,7 @@ h3 {
 
 .hero-meta {
   display: grid;
-  grid-template-columns: minmax(0, 32rem) auto;
+  grid-template-columns: minmax(0, 28rem) auto auto;
   justify-content: space-between;
   align-items: end;
   gap: 1.75rem 3rem;
@@ -345,6 +360,200 @@ h3 {
   }
 }
 
+/* ---------- Animated gradient ---------- */
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--glow);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.b1 {
+  width: 62vmax;
+  height: 62vmax;
+  right: -18vmax;
+  top: -24vmax;
+  background: radial-gradient(closest-side, #ff5a00, transparent);
+  animation: drift-1 22s ease-in-out infinite alternate;
+}
+
+.b2 {
+  width: 48vmax;
+  height: 48vmax;
+  left: -14vmax;
+  bottom: -26vmax;
+  background: radial-gradient(closest-side, #ffb000, transparent);
+  animation: drift-2 28s ease-in-out infinite alternate;
+}
+
+.b3 {
+  width: 40vmax;
+  height: 40vmax;
+  right: 8%;
+  bottom: -24vmax;
+  background: radial-gradient(closest-side, #ff2d1a, transparent);
+  animation: drift-3 19s ease-in-out infinite alternate;
+}
+
+/* Fine grain keeps the gradient from banding and gives it some texture */
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: var(--grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes drift-1 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-16vmax, 14vmax) scale(1.22); }
+}
+
+@keyframes drift-2 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(20vmax, -10vmax) scale(1.3); }
+}
+
+@keyframes drift-3 {
+  from { transform: translate(0, 0) scale(0.9); }
+  to   { transform: translate(-22vmax, -8vmax) scale(1.15); }
+}
+
+/* ---------- Rotating badge ---------- */
+
+.badge {
+  position: relative;
+  display: block;
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 50%;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.badge:hover {
+  color: var(--fg);
+}
+
+.badge-ring {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: spin 26s linear infinite;
+}
+
+.badge-ring text {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 11.5px;
+  fill: currentColor;
+}
+
+.badge:hover .badge-ring {
+  animation-play-state: paused;
+}
+
+.badge-core {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  display: grid;
+  place-items: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: transform 0.3s ease;
+}
+
+.badge-core svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: #000;
+}
+
+.badge:hover .badge-core {
+  transform: scale(1.18);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Skills band ---------- */
+
+.marquee {
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  padding-block: 1.4rem;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 48s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-list {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.marquee-list li {
+  display: flex;
+  align-items: center;
+  padding-right: clamp(1.75rem, 4vw, 3.5rem);
+  font-family: var(--display);
+  font-weight: 600;
+  font-stretch: 82%;
+  font-size: clamp(2rem, 1rem + 4vw, 4rem);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+/* Every other word is outlined */
+.marquee-list li:nth-child(even) {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--fg);
+}
+
+/* Diamond between words */
+.marquee-list li::after {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-left: clamp(1.75rem, 4vw, 3.5rem);
+  background: var(--accent);
+  transform: rotate(45deg);
+}
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+@media (forced-colors: active) {
+  .marquee-list li:nth-child(even) {
+    color: inherit;
+    -webkit-text-stroke: 0;
+  }
+}
+
 /* ==========================================================================
    Sections
    ========================================================================== */
@@ -373,6 +582,7 @@ h3 {
 .project {
   --row-muted: var(--muted);
   --row-accent: var(--accent);
+  --row-ink: var(--accent-ink);
   margin-inline: calc(var(--row-pad) * -1);
   border-top: 1px solid var(--line);
 }
@@ -419,7 +629,7 @@ h3 {
 }
 
 .project a:hover {
-  color: var(--row-accent);
+  color: var(--row-ink);
 }
 
 .project-toggle:focus-visible {
@@ -529,6 +739,7 @@ h3 {
   color: var(--inv-fg);
   --row-muted: var(--inv-muted);
   --row-accent: var(--inv-accent);
+  --row-ink: var(--inv-accent);
 }
 
 @media (hover: hover) {
@@ -537,6 +748,7 @@ h3 {
     color: var(--inv-fg);
     --row-muted: var(--inv-muted);
   --row-accent: var(--inv-accent);
+  --row-ink: var(--inv-accent);
   }
 }
 
@@ -611,7 +823,7 @@ h3 {
   height: 0.55rem;
   margin-right: 0.6rem;
   border-radius: 50%;
-  background: var(--accent-2);
+  background: var(--accent);
   vertical-align: 0.05em;
 }
 
@@ -679,13 +891,256 @@ h3 {
 }
 
 .copy-btn:hover {
-  color: var(--accent);
+  color: var(--accent-ink);
   text-decoration-thickness: 0.14em;
 }
 
 .copy-status {
   color: var(--accent-2);
   font-size: 0.95rem;
+}
+
+/* ---------- Services ---------- */
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 clamp(1.5rem, 4vw, 3rem);
+}
+
+.service {
+  position: relative;
+  padding-block: 2rem 2.5rem;
+  border-top: 1px solid var(--line);
+}
+
+/* Orange rule draws across the top on hover */
+.service::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 100%;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.service:hover::before {
+  transform: scaleX(1);
+}
+
+.service-icon {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent);
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.service:hover .service-icon {
+  transform: translateY(-5px) rotate(-4deg);
+}
+
+.service h3 {
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 0.6rem;
+}
+
+.service p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.service .service-list {
+  margin-top: 1rem;
+  font-family: var(--display);
+  font-size: 0.95rem;
+  color: var(--fg);
+}
+
+/* ---------- Skill chips ---------- */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.chips li {
+  padding: 0.2rem 0.85rem;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  font-family: var(--display);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--fg);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.chips li:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+/* ---------- Testimonials ---------- */
+
+.quotes {
+  display: grid;
+}
+
+.quote {
+  grid-area: 1 / 1;
+  position: relative;
+  margin: 0;
+  padding-top: 4.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.75rem);
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s linear 0.4s;
+}
+
+.quote.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+/* Large orange quotation mark */
+.quote::before {
+  content: "\201C";
+  position: absolute;
+  left: -0.05em;
+  top: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 8rem;
+  line-height: 0.8;
+  color: var(--accent);
+}
+
+.quote blockquote {
+  margin: 0;
+}
+
+.quote blockquote p {
+  margin: 0;
+  max-width: 44rem;
+  font-style: italic;
+  font-size: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.quote figcaption {
+  margin-top: 1.5rem;
+  color: var(--muted);
+}
+
+.quote figcaption strong {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.quote-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 2.5rem;
+}
+
+/* Each button is a tall tap target with a thin bar inside */
+.quote-dot {
+  position: relative;
+  width: 3rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.quote-dot::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 1.5px);
+  height: 3px;
+  background: var(--line-2);
+  transition: background-color 0.25s ease;
+}
+
+.quote-dot:hover::after {
+  background: var(--fg);
+}
+
+.quote-dot[aria-pressed="true"]::after {
+  background: var(--accent);
+}
+
+/* ---------- Contact: orange panel ---------- */
+
+.section--contact {
+  --fg: #000;
+  --bg: var(--accent);
+  --muted: #2b1200;
+  --line: rgba(0, 0, 0, 0.3);
+  border-top: 0;
+  background:
+    repeating-radial-gradient(
+      circle at 100% 100%,
+      transparent 0 3.25rem,
+      rgba(0, 0, 0, 0.16) 3.25rem calc(3.25rem + 1px)
+    ),
+    var(--accent);
+  color: #000;
+}
+
+.section--contact a {
+  text-decoration-color: #000;
+}
+
+.section--contact a:hover,
+.section--contact .copy-btn:hover {
+  color: #000;
+}
+
+.section--contact :focus-visible {
+  outline-color: #000;
+}
+
+.section--contact ::selection {
+  background: #000;
+  color: var(--accent);
+}
+
+.section--contact .big-mail {
+  padding-inline: 0.1em;
+  margin-inline: -0.1em;
+}
+
+.section--contact .big-mail:hover {
+  background: #000;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.section--contact .copy-btn {
+  color: #000;
+  text-decoration-color: #000;
+}
+
+.section--contact .copy-status {
+  color: #000;
 }
 
 /* ==========================================================================
@@ -717,6 +1172,18 @@ h3 {
 @media (max-width: 52rem) {
   .hero-meta {
     grid-template-columns: 1fr;
+  }
+
+  .badge {
+    display: none;
+  }
+
+  .services {
+    grid-template-columns: 1fr;
+  }
+
+  .quote::before {
+    font-size: 6rem;
   }
 
   .project-head {
@@ -783,6 +1250,37 @@ h3 {
   .project-more-inner,
   .project-icon::before,
   .project-icon::after {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blob,
+  .badge-ring,
+  .marquee-track {
+    animation: none;
+  }
+
+  /* The band becomes a static, wrapping list and the duplicate copy is hidden */
+  .marquee-track {
+    width: auto;
+  }
+
+  .marquee-list {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
+  .marquee-list[aria-hidden="true"] {
+    display: none;
+  }
+
+  .quote,
+  .quote-dot::after,
+  .service::before,
+  .service-icon,
+  .chips li,
+  .badge-core {
     transition: none;
   }
 }

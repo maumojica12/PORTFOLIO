@@ -58,6 +58,13 @@
   <main id="main">
     <!-- HERO -->
     <section class="hero" id="top">
+      <!-- Animated gradient behind the hero -->
+      <div class="hero-bg" aria-hidden="true">
+        <span class="blob b1"></span>
+        <span class="blob b2"></span>
+        <span class="blob b3"></span>
+      </div>
+
       <div class="wrap">
         <!-- EDIT: one sentence that says what you do -->
         <h1>I design and build websites that load fast and read clearly.</h1>
@@ -70,9 +77,30 @@
             <li><a href="https://github.com/your-username" rel="noopener">GitHub</a></li>
             <li><a href="https://www.linkedin.com/in/your-username" rel="noopener">LinkedIn</a></li>
           </ul>
+          <a class="badge" href="#contact" aria-label="Available for new projects. Go to contact.">
+            <svg class="badge-ring" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+              <defs><path id="badge-path" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs>
+              <text><textPath href="#badge-path" textLength="284" lengthAdjust="spacing">Available for new projects / Say hello / </textPath></text>
+            </svg>
+            <span class="badge-core" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false"><path d="M12 2c.6 5.6 4.4 9.4 10 10-5.6.6-9.4 4.4-10 10-.6-5.6-4.4-9.4-10-10 5.6-.6 9.4-4.4 10-10z"/></svg>
+            </span>
+          </a>
         </div>
       </div>
     </section>
+
+    <!-- SKILLS BAND: EDIT the list. Keep the second copy identical so the loop is seamless. -->
+    <div class="marquee" role="group" aria-label="Skills and tools">
+      <div class="marquee-track">
+        <ul class="marquee-list">
+          <li>React</li><li>TypeScript</li><li>Accessibility</li><li>Node.js</li><li>Performance</li><li>Design systems</li><li>PostgreSQL</li><li>Next.js</li>
+        </ul>
+        <ul class="marquee-list" aria-hidden="true">
+          <li>React</li><li>TypeScript</li><li>Accessibility</li><li>Node.js</li><li>Performance</li><li>Design systems</li><li>PostgreSQL</li><li>Next.js</li>
+        </ul>
+      </div>
+    </div>
 
     <!-- WORK -->
     <section class="section" id="work" aria-labelledby="work-title">
@@ -161,6 +189,42 @@
       </div>
     </section>
 
+
+    <!-- SERVICES -->
+    <section class="section" id="services" aria-labelledby="services-title">
+      <div class="wrap">
+        <h2 id="services-title">What I do</h2>
+
+        <!-- EDIT: change the three services, or copy a block to add more -->
+        <ul class="services">
+          <li class="service">
+            <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <circle cx="18" cy="18" r="11"/><rect x="18" y="18" width="22" height="22" rx="2"/>
+            </svg>
+            <h3>Design</h3>
+            <p>Interfaces that are calm, clear, and easy to use. I sketch in the browser so what you approve is what ships.</p>
+            <p class="service-list">Interface design, prototypes, design systems</p>
+          </li>
+          <li class="service">
+            <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M16 14 6 24l10 10M32 14l10 10-10 10M27 10l-6 28"/>
+            </svg>
+            <h3>Development</h3>
+            <p>Websites and web apps built with plain, maintainable code that other developers can pick up without a tour.</p>
+            <p class="service-list">Front end, APIs, databases, deployment</p>
+          </li>
+          <li class="service">
+            <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M27 5 10 27h12l-3 16 19-24H26z"/>
+            </svg>
+            <h3>Performance</h3>
+            <p>Faster pages, better search rankings, and fewer people leaving before the page loads.</p>
+            <p class="service-list">Audits, accessibility fixes, Core Web Vitals</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
     <!-- ABOUT -->
     <section class="section" id="about" aria-labelledby="about-title">
       <div class="wrap">
@@ -176,15 +240,15 @@
           <dl class="skills">
             <div>
               <dt>Languages</dt>
-              <dd>JavaScript, TypeScript, Python, SQL, HTML, CSS</dd>
+              <dd><ul class="chips"><li>JavaScript</li><li>TypeScript</li><li>Python</li><li>SQL</li><li>HTML</li><li>CSS</li></ul></dd>
             </div>
             <div>
               <dt>Frameworks</dt>
-              <dd>React, Next.js, Svelte, Node.js, Django</dd>
+              <dd><ul class="chips"><li>React</li><li>Next.js</li><li>Svelte</li><li>Node.js</li><li>Django</li></ul></dd>
             </div>
             <div>
               <dt>Tools</dt>
-              <dd>Git, Figma, Docker, GitHub Actions, Playwright</dd>
+              <dd><ul class="chips"><li>Git</li><li>Figma</li><li>Docker</li><li>GitHub Actions</li><li>Playwright</li></ul></dd>
             </div>
           </dl>
         </div>
@@ -223,8 +287,37 @@
       </div>
     </section>
 
+
+    <!-- TESTIMONIALS: EDIT names and quotes -->
+    <section class="section" id="testimonials" aria-labelledby="testimonials-title">
+      <div class="wrap">
+        <h2 id="testimonials-title">Kind words</h2>
+
+        <div class="quotes">
+          <figure class="quote is-active">
+            <blockquote><p>Working with Your Name was the easiest part of the project. They asked the right questions, shipped early, and the site has been fast and stable since launch.</p></blockquote>
+            <figcaption><strong>Casey Morgan</strong> Founder, Studio Name</figcaption>
+          </figure>
+          <figure class="quote">
+            <blockquote><p>Our reporting went from a day of spreadsheets to ten minutes. The team actually enjoys using it.</p></blockquote>
+            <figcaption><strong>Priya Shah</strong> Operations lead, Retail Co</figcaption>
+          </figure>
+          <figure class="quote">
+            <blockquote><p>It's rare to find someone who cares about design details and accessibility as much as they care about code.</p></blockquote>
+            <figcaption><strong>Daniel Okafor</strong> Design director, Agency Name</figcaption>
+          </figure>
+        </div>
+
+        <div class="quote-nav" role="group" aria-label="Choose a testimonial">
+          <button class="quote-dot" type="button" aria-label="Show testimonial 1 of 3" aria-pressed="true"></button>
+          <button class="quote-dot" type="button" aria-label="Show testimonial 2 of 3" aria-pressed="false"></button>
+          <button class="quote-dot" type="button" aria-label="Show testimonial 3 of 3" aria-pressed="false"></button>
+        </div>
+      </div>
+    </section>
+
     <!-- CONTACT -->
-    <section class="section" id="contact" aria-labelledby="contact-title">
+    <section class="section section--contact" id="contact" aria-labelledby="contact-title">
       <div class="wrap">
         <h2 id="contact-title">Contact</h2>
         <p class="contact-lead">Have a project in mind? Send me a note and I'll reply within two working days.</p>

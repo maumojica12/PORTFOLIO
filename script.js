@@ -172,8 +172,15 @@
     window.addEventListener("resize", update);
     update();
 
-    // The Experience section counts as part of About in the nav.
-    var linkFor = { work: "#work", about: "#about", experience: "#about", contact: "#contact" };
+    // Services, Experience and Kind words all count as part of About in the nav.
+    var linkFor = {
+      work: "#work",
+      services: "#about",
+      about: "#about",
+      experience: "#about",
+      testimonials: "#about",
+      contact: "#contact"
+    };
     var links = {};
     Array.prototype.forEach.call(document.querySelectorAll(".nav-list a"), function (a) {
       links[a.getAttribute("href")] = a;
@@ -206,6 +213,21 @@
         }, { rootMargin: "-45% 0px -50% 0px" }).observe(hero);
       }
     }
+  })();
+
+  /* ------------------------------------------------------------------
+     4b. Testimonials: pick one with the bars underneath
+     ------------------------------------------------------------------ */
+  (function testimonials() {
+    var quotes = Array.prototype.slice.call(document.querySelectorAll(".quote"));
+    var dots = Array.prototype.slice.call(document.querySelectorAll(".quote-dot"));
+
+    dots.forEach(function (dot, i) {
+      dot.addEventListener("click", function () {
+        quotes.forEach(function (q, j) { q.classList.toggle("is-active", i === j); });
+        dots.forEach(function (d, j) { d.setAttribute("aria-pressed", i === j ? "true" : "false"); });
+      });
+    });
   })();
 
   /* ------------------------------------------------------------------
