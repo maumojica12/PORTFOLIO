@@ -1,0 +1,738 @@
+/* ==========================================================================
+   Theme tokens
+   Light mode = white page, black text.  Dark mode = black page, white text.
+   With no saved choice, the site follows the visitor's system setting.
+   ========================================================================== */
+
+:root {
+  --bg: #ffffff;
+  --fg: #000000;
+  --muted: #595959;
+  --line: #dcdcdc;
+
+  /* Used for the inverted hover state on project rows */
+  --inv-bg: #000000;
+  --inv-fg: #ffffff;
+  --inv-muted: #a3a3a3;
+  --dim: #8c8c8c;
+
+  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --text: "Newsreader", Georgia, "Times New Roman", serif;
+
+  --pad: clamp(1.25rem, 4vw, 3rem);
+  --max: 76rem;
+  --header-h: 4rem;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #000000;
+    --fg: #ffffff;
+    --muted: #a3a3a3;
+    --line: #2b2b2b;
+    --inv-bg: #ffffff;
+    --inv-fg: #000000;
+    --inv-muted: #525252;
+    --dim: #737373;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #000000;
+  --fg: #ffffff;
+  --muted: #a3a3a3;
+  --line: #2b2b2b;
+  --inv-bg: #ffffff;
+  --inv-fg: #000000;
+  --inv-muted: #525252;
+  --dim: #737373;
+  color-scheme: dark;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--text);
+  font-size: 1.125rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 0.06em;
+}
+
+a:hover {
+  text-decoration-thickness: 0.14em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 3px;
+}
+
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 600;
+  margin: 0;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 20;
+  padding: 0.6rem 1rem;
+  background: var(--fg);
+  color: var(--bg);
+  font-family: var(--display);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: var(--header-h);
+}
+
+.brand {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.nav-list {
+  display: flex;
+  gap: clamp(0.9rem, 3vw, 1.75rem);
+}
+
+.nav-list a {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 0.98rem;
+  text-decoration: none;
+}
+
+.nav-list a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+}
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1.5px solid var(--fg);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* Circular wipe when the theme changes (browsers with View Transitions) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+
+/* Thin reading-progress line under the header */
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--fg);
+  transform: scaleX(var(--p, 0));
+  transform-origin: left;
+}
+
+/* Underline the link for the section in view */
+.nav-list a[aria-current="true"] {
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero {
+  padding-block: clamp(3.5rem, 11vw, 8.5rem) clamp(3.5rem, 9vw, 7rem);
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 1.1rem + 7.4vw, 7.75rem);
+  font-stretch: 82%;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.hero-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 32rem) auto;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1.75rem 3rem;
+  margin-top: clamp(2.5rem, 6vw, 5rem);
+}
+
+.hero-meta p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+}
+
+.hero-links a {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+/* Spotlight: on devices with a mouse, the headline dims and a soft circle
+   of full contrast follows the pointer. script.js adds .spot and drives the variables. */
+.hero h1 {
+  --sx: 50%;
+  --sy: 50%;
+  --r: 4000px;
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero h1.spot {
+    background-image: radial-gradient(
+      circle var(--r) at var(--sx) var(--sy),
+      var(--fg) 0,
+      var(--fg) 45%,
+      var(--dim) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
+@media (forced-colors: active) {
+  .hero h1.spot {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    color: inherit;
+  }
+}
+
+/* One entrance on page load, nothing after that */
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1,
+  .hero-meta {
+    animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .hero-meta {
+    animation-delay: 0.18s;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+  }
+}
+
+/* ==========================================================================
+   Sections
+   ========================================================================== */
+
+.section {
+  padding-block: clamp(3.5rem, 8vw, 6.5rem);
+  border-top: 1px solid var(--line);
+  scroll-margin-top: var(--header-h);
+}
+
+.section h2 {
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+/* ---------- Work ---------- */
+
+.projects {
+  --row-pad: 1rem;
+  --cols: minmax(0, 1.1fr) minmax(0, 1.5fr) minmax(0, 0.9fr) 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.project {
+  --row-muted: var(--muted);
+  margin-inline: calc(var(--row-pad) * -1);
+  border-top: 1px solid var(--line);
+}
+
+.project-head {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--cols);
+  gap: 1rem 3rem;
+  align-items: baseline;
+  padding: 2rem var(--row-pad);
+}
+
+.project h3 {
+  font-size: clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.project-toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* Makes the whole row one click target */
+.project-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.project :focus-visible {
+  outline-color: currentColor;
+}
+
+.project-toggle:focus-visible {
+  outline: none;
+}
+
+.project-toggle:focus-visible::after {
+  outline: 2px solid currentColor;
+  outline-offset: -6px;
+}
+
+.project-desc,
+.project-meta {
+  margin: 0;
+  color: var(--row-muted);
+}
+
+.project-meta {
+  font-size: 0.98rem;
+  line-height: 1.5;
+  text-align: right;
+}
+
+/* Plus that turns into a cross when the row is open */
+.project-icon {
+  position: relative;
+  align-self: center;
+  justify-self: end;
+  width: 1rem;
+  height: 1rem;
+}
+
+.project-icon::before,
+.project-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc(50% - 1px);
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transition: transform 0.3s ease;
+}
+
+.project-icon::after {
+  transform: rotate(90deg);
+}
+
+.project.is-open .project-icon::after {
+  transform: rotate(0deg);
+}
+
+.project.is-open .project-icon::before {
+  transform: rotate(180deg);
+}
+
+/* Details: height animates from 0 to content size */
+.project-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+
+.project.is-open .project-more {
+  grid-template-rows: 1fr;
+}
+
+.project-more-inner {
+  min-height: 0;
+  overflow: hidden;
+  visibility: hidden; /* keeps hidden links out of the tab order */
+  transition: visibility 0s linear 0.35s;
+}
+
+.project.is-open .project-more-inner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.project-more-body {
+  display: grid;
+  grid-template-columns: var(--cols);
+  gap: 1rem 3rem;
+  padding: 0 var(--row-pad) 2rem;
+}
+
+.project-more-body p {
+  grid-column: 2;
+  margin: 0;
+  max-width: 34rem;
+}
+
+.project-links {
+  grid-column: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+  font-family: var(--display);
+  font-weight: 500;
+}
+
+.project.is-open,
+.project:has(:focus-visible) {
+  background: var(--inv-bg);
+  color: var(--inv-fg);
+  --row-muted: var(--inv-muted);
+}
+
+@media (hover: hover) {
+  .project:hover {
+    background: var(--inv-bg);
+    color: var(--inv-fg);
+    --row-muted: var(--inv-muted);
+  }
+}
+
+/* ---------- About ---------- */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 3rem clamp(3rem, 8vw, 7rem);
+  align-items: start;
+}
+
+.prose {
+  max-width: 38rem;
+  font-size: 1.2rem;
+}
+
+.prose p {
+  margin: 0 0 1.25em;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+.skills > div {
+  padding-block: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.skills > div:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.skills dt {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 0.15rem;
+}
+
+.skills dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ---------- Experience ---------- */
+
+.timeline > li {
+  display: grid;
+  grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+  gap: 0.5rem 2rem;
+  padding-block: 1.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.timeline > li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.when {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.timeline h3 {
+  font-size: 1.4rem;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+
+.timeline p:not(.when) {
+  margin: 0;
+  max-width: 42rem;
+  color: var(--muted);
+}
+
+/* ---------- Contact ---------- */
+
+.contact-lead {
+  margin: 0 0 1.5rem;
+  max-width: 34rem;
+  color: var(--muted);
+}
+
+.big-mail {
+  display: inline-block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-stretch: 82%;
+  font-size: clamp(1.6rem, 0.6rem + 5.6vw, 5.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-decoration-thickness: 0.05em;
+  text-underline-offset: 0.14em;
+  overflow-wrap: anywhere;
+}
+
+.big-mail:hover {
+  text-decoration-thickness: 0.1em;
+}
+
+.copy-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 1.25rem 0 0;
+}
+
+.copy-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--fg);
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 1rem;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 0.06em;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  text-decoration-thickness: 0.14em;
+}
+
+.copy-status {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding-block: 2rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+
+.footer-inner p {
+  margin: 0;
+}
+
+/* ==========================================================================
+   Small screens
+   ========================================================================== */
+
+@media (max-width: 52rem) {
+  .hero-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .project-head {
+    grid-template-columns: minmax(0, 1fr) 1.25rem;
+    gap: 0.6rem 1rem;
+    padding-block: 1.5rem;
+  }
+
+  .project-head h3,
+  .project-desc,
+  .project-meta {
+    grid-column: 1;
+  }
+
+  .project-icon {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .project-meta {
+    text-align: left;
+  }
+
+  .project-more-body {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .project-more-body p,
+  .project-links {
+    grid-column: 1;
+  }
+
+  .project-links {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline > li {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 26rem) {
+  body {
+    font-size: 1.05rem;
+  }
+
+  .brand {
+    font-size: 1rem;
+  }
+
+  .nav-list a {
+    font-size: 0.92rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-more,
+  .project-more-inner,
+  .project-icon::before,
+  .project-icon::after {
+    transition: none;
+  }
+}

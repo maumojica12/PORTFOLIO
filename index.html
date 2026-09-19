@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- EDIT: page title and description (shown in browser tabs and search results) -->
+  <title>Your Name, web developer</title>
+  <meta name="description" content="Portfolio of Your Name, a web developer who builds fast, accessible websites and web apps.">
+
+  <!-- EDIT: replace the URL with your GitHub Pages address -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Your Name, web developer">
+  <meta property="og:description" content="Fast, accessible websites and web apps.">
+  <meta property="og:url" content="https://your-username.github.io/">
+
+  <meta name="theme-color" content="#ffffff" id="theme-color">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Applies a saved theme before first paint so the page doesn't flash -->
+  <script>
+    try {
+      var saved = localStorage.getItem("theme");
+      if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top">Your Name</a>
+      <div class="header-right">
+        <nav aria-label="Main">
+          <ul class="nav-list">
+            <li><a href="#work">Work</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="progress" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="wrap">
+        <!-- EDIT: one sentence that says what you do -->
+        <h1>I design and build websites that load fast and read clearly.</h1>
+
+        <div class="hero-meta">
+          <!-- EDIT: location and availability -->
+          <p>Web developer based in Your City. Open to freelance projects and full-time roles.</p>
+          <ul class="hero-links">
+            <li><a href="mailto:hello@example.com">Email</a></li>
+            <li><a href="https://github.com/your-username" rel="noopener">GitHub</a></li>
+            <li><a href="https://www.linkedin.com/in/your-username" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section class="section" id="work" aria-labelledby="work-title">
+      <div class="wrap">
+        <h2 id="work-title">Selected work</h2>
+
+        <!-- EDIT: copy one <li class="project"> block per project. Give each one a unique id (project-1, project-2...) and match aria-controls to it. Clicking a row opens its details. -->
+        <ul class="projects">
+          <li class="project">
+            <div class="project-head">
+              <h3><button class="project-toggle" type="button" aria-expanded="false" aria-controls="project-1">Project One</button></h3>
+              <p class="project-desc">A dashboard that turns raw sales data into weekly reports for a small retail team. Cut their reporting time from a day to ten minutes.</p>
+              <p class="project-meta">React, TypeScript, PostgreSQL<br>2026</p>
+              <span class="project-icon" aria-hidden="true"></span>
+            </div>
+            <div class="project-more" id="project-1" role="region" aria-label="Project One details">
+              <div class="project-more-inner">
+                <div class="project-more-body">
+                  <p>I built the data pipeline, the report builder, and the dashboard. Reports now email themselves every Monday, and the team can filter by store, product, or week without asking anyone for a spreadsheet.</p>
+                  <ul class="project-links">
+                    <li><a href="https://example.com" rel="noopener">Live site</a></li>
+                    <li><a href="https://github.com/your-username/project-one" rel="noopener">Source</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="project">
+            <div class="project-head">
+              <h3><button class="project-toggle" type="button" aria-expanded="false" aria-controls="project-2">Project Two</button></h3>
+              <p class="project-desc">A booking site for a local studio with online payments and automatic email reminders.</p>
+              <p class="project-meta">Next.js, Stripe, Tailwind CSS<br>2025</p>
+              <span class="project-icon" aria-hidden="true"></span>
+            </div>
+            <div class="project-more" id="project-2" role="region" aria-label="Project Two details">
+              <div class="project-more-inner">
+                <div class="project-more-body">
+                  <p>Clients pick a class, pay, and get a calendar invite. Reminders go out the day before, which brought no-shows down by a third.</p>
+                  <ul class="project-links">
+                    <li><a href="https://example.com" rel="noopener">Live site</a></li>
+                    <li><a href="https://github.com/your-username/project-two" rel="noopener">Source</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="project">
+            <div class="project-head">
+              <h3><button class="project-toggle" type="button" aria-expanded="false" aria-controls="project-3">Project Three</button></h3>
+              <p class="project-desc">An open-source command line tool that checks a site for broken links and missing alt text.</p>
+              <p class="project-meta">Node.js, Playwright<br>2025</p>
+              <span class="project-icon" aria-hidden="true"></span>
+            </div>
+            <div class="project-more" id="project-3" role="region" aria-label="Project Three details">
+              <div class="project-more-inner">
+                <div class="project-more-body">
+                  <p>It crawls a site, reports problems by page, and runs in CI. Used by a few hundred projects, with contributions from people I've never met.</p>
+                  <ul class="project-links">
+                    <li><a href="https://example.com" rel="noopener">Live site</a></li>
+                    <li><a href="https://github.com/your-username/project-three" rel="noopener">Source</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="project">
+            <div class="project-head">
+              <h3><button class="project-toggle" type="button" aria-expanded="false" aria-controls="project-4">Project Four</button></h3>
+              <p class="project-desc">A recipe app that scales ingredients and works offline in the kitchen.</p>
+              <p class="project-meta">Svelte, IndexedDB<br>2024</p>
+              <span class="project-icon" aria-hidden="true"></span>
+            </div>
+            <div class="project-more" id="project-4" role="region" aria-label="Project Four details">
+              <div class="project-more-inner">
+                <div class="project-more-body">
+                  <p>Everything is stored on the device, so it works without signal. Change the number of servings and every amount updates, including the fractions.</p>
+                  <ul class="project-links">
+                    <li><a href="https://example.com" rel="noopener">Live site</a></li>
+                    <li><a href="https://github.com/your-username/project-four" rel="noopener">Source</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="wrap">
+        <h2 id="about-title">About</h2>
+
+        <div class="about-grid">
+          <div class="prose">
+            <!-- EDIT: write in the first person, keep it short -->
+            <p>I'm a web developer with six years of experience building products for startups and small businesses. I care about pages that work on slow connections, on small screens, and with a keyboard.</p>
+            <p>I like working close to design, turning a rough sketch into something people can use. Outside of work I run, take film photos, and cook too much food on Sundays.</p>
+          </div>
+
+          <dl class="skills">
+            <div>
+              <dt>Languages</dt>
+              <dd>JavaScript, TypeScript, Python, SQL, HTML, CSS</dd>
+            </div>
+            <div>
+              <dt>Frameworks</dt>
+              <dd>React, Next.js, Svelte, Node.js, Django</dd>
+            </div>
+            <div>
+              <dt>Tools</dt>
+              <dd>Git, Figma, Docker, GitHub Actions, Playwright</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="section" id="experience" aria-labelledby="experience-title">
+      <div class="wrap">
+        <h2 id="experience-title">Experience</h2>
+
+        <!-- EDIT: newest first -->
+        <ol class="timeline">
+          <li>
+            <p class="when">2024 to present</p>
+            <div>
+              <h3>Senior Developer, Company Name</h3>
+              <p>Lead a team of four building the customer web app. Moved the front end to TypeScript and halved page load time.</p>
+            </div>
+          </li>
+          <li>
+            <p class="when">2021 to 2024</p>
+            <div>
+              <h3>Developer, Studio Name</h3>
+              <p>Built marketing sites and web apps for clients in retail, health, and education.</p>
+            </div>
+          </li>
+          <li>
+            <p class="when">2019 to 2021</p>
+            <div>
+              <h3>Junior Developer, Agency Name</h3>
+              <p>Maintained client sites and shipped my first production features.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="wrap">
+        <h2 id="contact-title">Contact</h2>
+        <p class="contact-lead">Have a project in mind? Send me a note and I'll reply within two working days.</p>
+        <a class="big-mail" id="email" href="mailto:hello@example.com">hello@example.com</a>
+        <p class="copy-row">
+          <button class="copy-btn" id="copy-email" type="button">Copy address</button>
+          <span class="copy-status" id="copy-status" role="status" aria-live="polite"></span>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>&copy; <span id="year">2026</span> Your Name</p>
+      <p><a href="#top">Back to top</a></p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
