@@ -75,6 +75,7 @@
     var client = { x: 0, y: 0 };
     var r = FAR;
     var targetR = FAR;
+    var ar = -100;   // radius of the accent-coloured core; negative keeps it hidden
     var raf = null;
 
     h1.classList.add("spot");
@@ -87,12 +88,15 @@
       pos.x += (tx - pos.x) * 0.2;
       pos.y += (ty - pos.y) * 0.2;
       r += (targetR - r) * 0.12;
+      var targetAr = targetR === FAR ? -100 : 70;
+      ar += (targetAr - ar) * 0.12;
 
       h1.style.setProperty("--sx", pos.x + "px");
       h1.style.setProperty("--sy", pos.y + "px");
       h1.style.setProperty("--r", r + "px");
+      h1.style.setProperty("--ar", ar + "px");
 
-      var moving = Math.abs(tx - pos.x) > 0.5 || Math.abs(ty - pos.y) > 0.5 || Math.abs(targetR - r) > 1;
+      var moving = Math.abs(tx - pos.x) > 0.5 || Math.abs(ty - pos.y) > 0.5 || Math.abs(targetR - r) > 1 || Math.abs(targetAr - ar) > 0.5;
       raf = moving ? requestAnimationFrame(frame) : null;
     }
 

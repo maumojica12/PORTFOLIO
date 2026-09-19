@@ -16,6 +16,11 @@
   --inv-muted: #a3a3a3;
   --dim: #8c8c8c;
 
+  /* Accent pair: cobalt for anything you can act on, ember for "you are here" and status */
+  --accent: #1a2cff;
+  --accent-2: #c2410c;
+  --inv-accent: #8593ff; /* accent as seen on an inverted row */
+
   --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
   --text: "Newsreader", Georgia, "Times New Roman", serif;
 
@@ -36,6 +41,9 @@
     --inv-fg: #000000;
     --inv-muted: #525252;
     --dim: #737373;
+    --accent: #8593ff;
+    --accent-2: #ff9558;
+    --inv-accent: #1a2cff;
     color-scheme: dark;
   }
 }
@@ -49,6 +57,9 @@
   --inv-fg: #000000;
   --inv-muted: #525252;
   --dim: #737373;
+  --accent: #8593ff;
+  --accent-2: #ff9558;
+  --inv-accent: #1a2cff;
   color-scheme: dark;
 }
 
@@ -85,17 +96,24 @@ body {
 
 a {
   color: inherit;
+  text-decoration-color: var(--accent);
   text-underline-offset: 0.18em;
   text-decoration-thickness: 0.06em;
 }
 
 a:hover {
+  color: var(--accent);
   text-decoration-thickness: 0.14em;
 }
 
 :focus-visible {
-  outline: 2px solid var(--fg);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
 }
 
 ul,
@@ -220,7 +238,7 @@ h3 {
   right: 0;
   bottom: -1px;
   height: 2px;
-  background: var(--fg);
+  background: var(--accent);
   transform: scaleX(var(--p, 0));
   transform-origin: left;
 }
@@ -228,7 +246,8 @@ h3 {
 /* Underline the link for the section in view */
 .nav-list a[aria-current="true"] {
   text-decoration: underline;
-  text-decoration-thickness: 0.08em;
+  text-decoration-color: var(--accent-2);
+  text-decoration-thickness: 0.14em;
 }
 
 /* ==========================================================================
@@ -279,15 +298,18 @@ h3 {
   --sx: 50%;
   --sy: 50%;
   --r: 4000px;
+  --ar: -100px; /* radius of the accent core; negative = hidden */
 }
 
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
   .hero h1.spot {
     background-image: radial-gradient(
       circle var(--r) at var(--sx) var(--sy),
-      var(--fg) 0,
-      var(--fg) 45%,
-      var(--dim) 100%
+      var(--accent) 0,
+      var(--accent) var(--ar),
+      var(--fg) calc(var(--ar) + 60px),
+      var(--fg) calc(var(--r) * 0.45),
+      var(--dim) var(--r)
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -350,6 +372,7 @@ h3 {
 
 .project {
   --row-muted: var(--muted);
+  --row-accent: var(--accent);
   margin-inline: calc(var(--row-pad) * -1);
   border-top: 1px solid var(--line);
 }
@@ -388,7 +411,15 @@ h3 {
 }
 
 .project :focus-visible {
-  outline-color: currentColor;
+  outline-color: var(--row-accent);
+}
+
+.project a {
+  text-decoration-color: var(--row-accent);
+}
+
+.project a:hover {
+  color: var(--row-accent);
 }
 
 .project-toggle:focus-visible {
@@ -396,7 +427,7 @@ h3 {
 }
 
 .project-toggle:focus-visible::after {
-  outline: 2px solid currentColor;
+  outline: 2px solid var(--row-accent);
   outline-offset: -6px;
 }
 
@@ -419,6 +450,7 @@ h3 {
   justify-self: end;
   width: 1rem;
   height: 1rem;
+  color: var(--row-accent);
 }
 
 .project-icon::before,
@@ -496,6 +528,7 @@ h3 {
   background: var(--inv-bg);
   color: var(--inv-fg);
   --row-muted: var(--inv-muted);
+  --row-accent: var(--inv-accent);
 }
 
 @media (hover: hover) {
@@ -503,6 +536,7 @@ h3 {
     background: var(--inv-bg);
     color: var(--inv-fg);
     --row-muted: var(--inv-muted);
+  --row-accent: var(--inv-accent);
   }
 }
 
@@ -570,6 +604,17 @@ h3 {
   color: var(--muted);
 }
 
+.when.is-current::before {
+  content: "";
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-right: 0.6rem;
+  border-radius: 50%;
+  background: var(--accent-2);
+  vertical-align: 0.05em;
+}
+
 .timeline h3 {
   font-size: 1.4rem;
   letter-spacing: -0.015em;
@@ -629,12 +674,17 @@ h3 {
   cursor: pointer;
 }
 
+.copy-btn {
+  text-decoration-color: var(--accent);
+}
+
 .copy-btn:hover {
+  color: var(--accent);
   text-decoration-thickness: 0.14em;
 }
 
 .copy-status {
-  color: var(--muted);
+  color: var(--accent-2);
   font-size: 0.95rem;
 }
 
