@@ -22,11 +22,11 @@
   --accent-2: #1a2cff;
   --inv-accent: #ff7a1a;  /* orange as seen on an inverted (hovered or open) row */
   --line-2: #bdbdbd;
-  --glow: 0.62;           /* strength of the hero gradient */
-  --grain: 0.09;
 
-  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
-  --text: "Newsreader", Georgia, "Times New Roman", serif;
+  /* One typeface for everything. Change it here and it changes everywhere. */
+  --font: "Switzer", "Helvetica Neue", Arial, sans-serif;
+  --display: var(--font);
+  --text: var(--font);
 
   --pad: clamp(1.25rem, 4vw, 3rem);
   --max: 76rem;
@@ -50,8 +50,6 @@
     --accent-2: #8593ff;
     --inv-accent: #c2410c;
     --line-2: #444444;
-    --glow: 0.58;
-  --grain: 0.2;
     color-scheme: dark;
   }
 }
@@ -70,8 +68,6 @@
   --accent-2: #8593ff;
   --inv-accent: #c2410c;
   --line-2: #444444;
-  --glow: 0.58;
-  --grain: 0.2;
   color-scheme: dark;
 }
 
@@ -266,17 +262,33 @@ h3 {
    Hero
    ========================================================================== */
 
+/* The hero is a dark canvas in both light and dark mode, so white text stays readable
+   over the deep blues and blacks of the gradient. Everything below the hero follows the theme. */
 .hero {
+  --fg: #ffffff;
+  --bg: #000000;
+  --spot-dim: rgba(255, 255, 255, 0.62);   /* headline outside the hover spotlight */
+  --grain: 0.22;
+
+  /* Gradient palette, sampled from the reference image */
+  --c-teal: #0a6f9c;
+  --c-void: #020a12;
+  --c-orange: #d4640f;
+  --c-red: #b81e02;
+  --c-pink: #a9225a;
+  --c-cream: #dab487;
+
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  background: #000000;
+  color: var(--fg);
   padding-block: clamp(3.5rem, 11vw, 8.5rem) clamp(3.5rem, 9vw, 7rem);
 }
 
 .hero h1 {
-  font-size: clamp(2.6rem, 1.1rem + 7.4vw, 7.75rem);
-  font-stretch: 82%;
-  line-height: 0.98;
+  font-size: clamp(2.4rem, 0.9rem + 6.4vw, 6.5rem);
+  line-height: 1.02;
   letter-spacing: -0.035em;
   text-wrap: balance;
 }
@@ -290,9 +302,10 @@ h3 {
   margin-top: clamp(2.5rem, 6vw, 5rem);
 }
 
+/* Full-strength text here: grey copy is hard to read on top of the orange gradient */
 .hero-meta p {
   margin: 0;
-  color: var(--muted);
+  color: var(--fg);
 }
 
 .hero-links {
@@ -307,6 +320,25 @@ h3 {
   font-size: 1.1rem;
 }
 
+/* Orange links, focus rings and selections would disappear on the orange gradient,
+   so inside the hero they use the text color instead. */
+.hero a {
+  text-decoration-color: var(--fg);
+}
+
+.hero a:hover {
+  color: var(--fg);
+}
+
+.hero :focus-visible {
+  outline-color: var(--fg);
+}
+
+.hero ::selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+
 /* Spotlight: on devices with a mouse, the headline dims and a soft circle
    of full contrast follows the pointer. script.js adds .spot and drives the variables. */
 .hero h1 {
@@ -314,17 +346,20 @@ h3 {
   --sy: 50%;
   --r: 4000px;
   --ar: -100px; /* radius of the accent core; negative = hidden */
+  /* Orange text would vanish on the orange gradient, so the core uses the text color.
+     Set --spot-core: var(--accent) if you want the orange core back. */
+  --spot-core: var(--fg);
 }
 
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
   .hero h1.spot {
     background-image: radial-gradient(
       circle var(--r) at var(--sx) var(--sy),
-      var(--accent) 0,
-      var(--accent) var(--ar),
+      var(--spot-core) 0,
+      var(--spot-core) var(--ar),
       var(--fg) calc(var(--ar) + 60px),
       var(--fg) calc(var(--r) * 0.45),
-      var(--dim) var(--r)
+      var(--spot-dim) var(--r)
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -362,14 +397,15 @@ h3 {
 
 /* ---------- Animated gradient ---------- */
 
+/* Deep color fields stacked from top to bottom: teal, a black void, orange, red, pink.
+   Each one drifts, tilts and breathes on its own loop, so the bands keep flowing into each
+   other like a looping animation. Always on; no hover needed. Colors are the --c-* tokens above. */
 .hero-bg {
   position: absolute;
   inset: 0;
   z-index: -1;
+  overflow: hidden;
   pointer-events: none;
-  opacity: var(--glow);
-  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
 }
 
 .blob {
@@ -378,34 +414,65 @@ h3 {
   will-change: transform;
 }
 
-.b1 {
-  width: 62vmax;
-  height: 62vmax;
-  right: -18vmax;
-  top: -24vmax;
-  background: radial-gradient(closest-side, #ff5a00, transparent);
-  animation: drift-1 22s ease-in-out infinite alternate;
+.b-teal {
+  left: -30%;
+  top: -85%;
+  width: 160%;
+  height: 160%;
+  background: radial-gradient(closest-side, var(--c-teal) 45%, transparent);
+  animation: flow-teal 22s ease-in-out infinite;
 }
 
-.b2 {
-  width: 48vmax;
-  height: 48vmax;
-  left: -14vmax;
-  bottom: -26vmax;
-  background: radial-gradient(closest-side, #ffb000, transparent);
-  animation: drift-2 28s ease-in-out infinite alternate;
+.b-orange {
+  left: -30%;
+  top: 29%;
+  width: 160%;
+  height: 54%;
+  background: radial-gradient(closest-side, var(--c-orange) 48%, transparent);
+  transform: rotate(-5deg);
+  animation: flow-orange 16s ease-in-out infinite;
 }
 
-.b3 {
-  width: 40vmax;
-  height: 40vmax;
-  right: 8%;
-  bottom: -24vmax;
-  background: radial-gradient(closest-side, #ff2d1a, transparent);
-  animation: drift-3 19s ease-in-out infinite alternate;
+.b-red {
+  left: -30%;
+  top: 56%;
+  width: 160%;
+  height: 56%;
+  background: radial-gradient(closest-side, var(--c-red) 40%, transparent);
+  transform: rotate(3deg);
+  animation: flow-red 19s ease-in-out infinite;
 }
 
-/* Fine grain keeps the gradient from banding and gives it some texture */
+.b-pink {
+  left: 26%;
+  top: 82%;
+  width: 62%;
+  height: 44%;
+  background: radial-gradient(closest-side, var(--c-pink) 30%, transparent);
+  animation: flow-pink 14s ease-in-out infinite;
+}
+
+.b-void {
+  left: 12%;
+  top: -12%;
+  width: 64%;
+  height: 58%;
+  background: radial-gradient(closest-side, var(--c-void) 42%, transparent);
+  transform: rotate(-4deg);
+  animation: flow-void 24s ease-in-out infinite;
+}
+
+.b-cream {
+  left: 84%;
+  top: 16%;
+  width: 34%;
+  height: 34%;
+  background: radial-gradient(closest-side, var(--c-cream), transparent);
+  opacity: 0.45;
+  animation: flow-cream 12s ease-in-out infinite;
+}
+
+/* Fine grain keeps the dark gradient from banding and gives it some texture */
 .hero-bg::after {
   content: "";
   position: absolute;
@@ -414,19 +481,41 @@ h3 {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-@keyframes drift-1 {
-  from { transform: translate(0, 0) scale(1); }
-  to   { transform: translate(-16vmax, 14vmax) scale(1.22); }
+/* Every path starts and ends on the same pose, so each loop is seamless.
+   Distances are percentages of the layer's own size. */
+@keyframes flow-teal {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40%      { transform: translate(8%, 6%) scale(1.08); }
+  75%      { transform: translate(-7%, 2%) scale(0.96); }
 }
 
-@keyframes drift-2 {
-  from { transform: translate(0, 0) scale(1); }
-  to   { transform: translate(20vmax, -10vmax) scale(1.3); }
+@keyframes flow-orange {
+  0%, 100% { transform: translate(0, 0) rotate(-5deg) scale(1); }
+  35%      { transform: translate(9%, -22%) rotate(-1deg) scale(1.08); }
+  70%      { transform: translate(-9%, 18%) rotate(-9deg) scale(0.96); }
 }
 
-@keyframes drift-3 {
-  from { transform: translate(0, 0) scale(0.9); }
-  to   { transform: translate(-22vmax, -8vmax) scale(1.15); }
+@keyframes flow-red {
+  0%, 100% { transform: translate(0, 0) rotate(3deg) scale(1); }
+  30%      { transform: translate(-8%, -14%) rotate(-2deg) scale(1.06); }
+  65%      { transform: translate(8%, 10%) rotate(6deg) scale(1.02); }
+}
+
+@keyframes flow-pink {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40%      { transform: translate(-40%, -26%) scale(1.15); }
+  75%      { transform: translate(28%, -8%) scale(0.92); }
+}
+
+@keyframes flow-void {
+  0%, 100% { transform: translate(0, 0) rotate(-4deg) scale(1); }
+  35%      { transform: translate(16%, 8%) rotate(4deg) scale(1.06); }
+  70%      { transform: translate(-14%, -6%) rotate(-9deg) scale(0.94); }
+}
+
+@keyframes flow-cream {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-6%, 70%) scale(1.2); }
 }
 
 /* ---------- Rotating badge ---------- */
@@ -463,6 +552,7 @@ h3 {
   animation-play-state: paused;
 }
 
+/* Text-colored core so it stands out against the orange gradient */
 .badge-core {
   position: absolute;
   inset: 0;
@@ -472,14 +562,14 @@ h3 {
   width: 2.9rem;
   height: 2.9rem;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--fg);
   transition: transform 0.3s ease;
 }
 
 .badge-core svg {
   width: 1.5rem;
   height: 1.5rem;
-  fill: #000;
+  fill: var(--bg);
 }
 
 .badge:hover .badge-core {
@@ -519,7 +609,6 @@ h3 {
   padding-right: clamp(1.75rem, 4vw, 3.5rem);
   font-family: var(--display);
   font-weight: 600;
-  font-stretch: 82%;
   font-size: clamp(2rem, 1rem + 4vw, 4rem);
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -747,8 +836,8 @@ h3 {
     background: var(--inv-bg);
     color: var(--inv-fg);
     --row-muted: var(--inv-muted);
-  --row-accent: var(--inv-accent);
-  --row-ink: var(--inv-accent);
+    --row-accent: var(--inv-accent);
+    --row-ink: var(--inv-accent);
   }
 }
 
@@ -772,27 +861,6 @@ h3 {
 
 .prose p:last-child {
   margin-bottom: 0;
-}
-
-.skills > div {
-  padding-block: 1rem;
-  border-top: 1px solid var(--line);
-}
-
-.skills > div:last-child {
-  border-bottom: 1px solid var(--line);
-}
-
-.skills dt {
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: 1.05rem;
-  margin-bottom: 0.15rem;
-}
-
-.skills dd {
-  margin: 0;
-  color: var(--muted);
 }
 
 /* ---------- Experience ---------- */
@@ -852,7 +920,6 @@ h3 {
   display: inline-block;
   font-family: var(--display);
   font-weight: 600;
-  font-stretch: 82%;
   font-size: clamp(1.6rem, 0.6rem + 5.6vw, 5.5rem);
   line-height: 1.1;
   letter-spacing: -0.03em;
@@ -962,31 +1029,6 @@ h3 {
   font-family: var(--display);
   font-size: 0.95rem;
   color: var(--fg);
-}
-
-/* ---------- Skill chips ---------- */
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.6rem;
-}
-
-.chips li {
-  padding: 0.2rem 0.85rem;
-  border: 1px solid var(--line-2);
-  border-radius: 999px;
-  font-family: var(--display);
-  font-size: 0.92rem;
-  line-height: 1.5;
-  color: var(--fg);
-  transition: border-color 0.2s ease, background-color 0.2s ease;
-}
-
-.chips li:hover {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 /* ---------- Testimonials ---------- */
@@ -1279,7 +1321,6 @@ h3 {
   .quote-dot::after,
   .service::before,
   .service-icon,
-  .chips li,
   .badge-core {
     transition: none;
   }

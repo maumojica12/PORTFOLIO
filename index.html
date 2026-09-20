@@ -17,9 +17,10 @@
   <meta name="theme-color" content="#ffffff" id="theme-color">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+  <!-- Switzer (Fontshare) is the only typeface. 400, 500, 600, 700 plus regular italic (401) for the testimonials. -->
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,401,500,600,700&display=swap">
   <link rel="stylesheet" href="styles.css">
 
   <!-- Applies a saved theme before first paint so the page doesn't flash -->
@@ -60,9 +61,12 @@
     <section class="hero" id="top">
       <!-- Animated gradient behind the hero -->
       <div class="hero-bg" aria-hidden="true">
-        <span class="blob b1"></span>
-        <span class="blob b2"></span>
-        <span class="blob b3"></span>
+        <span class="blob b-teal"></span>
+        <span class="blob b-orange"></span>
+        <span class="blob b-red"></span>
+        <span class="blob b-pink"></span>
+        <span class="blob b-void"></span>
+        <span class="blob b-cream"></span>
       </div>
 
       <div class="wrap">
@@ -236,21 +240,6 @@
             <p>I'm a web developer with six years of experience building products for startups and small businesses. I care about pages that work on slow connections, on small screens, and with a keyboard.</p>
             <p>I like working close to design, turning a rough sketch into something people can use. Outside of work I run, take film photos, and cook too much food on Sundays.</p>
           </div>
-
-          <dl class="skills">
-            <div>
-              <dt>Languages</dt>
-              <dd><ul class="chips"><li>JavaScript</li><li>TypeScript</li><li>Python</li><li>SQL</li><li>HTML</li><li>CSS</li></ul></dd>
-            </div>
-            <div>
-              <dt>Frameworks</dt>
-              <dd><ul class="chips"><li>React</li><li>Next.js</li><li>Svelte</li><li>Node.js</li><li>Django</li></ul></dd>
-            </div>
-            <div>
-              <dt>Tools</dt>
-              <dd><ul class="chips"><li>Git</li><li>Figma</li><li>Docker</li><li>GitHub Actions</li><li>Playwright</li></ul></dd>
-            </div>
-          </dl>
         </div>
       </div>
     </section>
