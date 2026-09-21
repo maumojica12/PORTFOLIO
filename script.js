@@ -172,13 +172,13 @@
     window.addEventListener("resize", update);
     update();
 
-    // Services, Experience and Kind words all count as part of About in the nav.
+    // Which nav link is current for each section. Services and Experience count as part of About.
     var linkFor = {
       work: "#work",
+      certifications: "#certifications",
       services: "#about",
       about: "#about",
       experience: "#about",
-      testimonials: "#about",
       contact: "#contact"
     };
     var links = {};
@@ -205,29 +205,77 @@
         if (section) observer.observe(section);
       });
 
-      // Back in the hero: nothing is current.
+      // Back in the hero: Home is current.
       var hero = document.getElementById("top");
       if (hero) {
         new IntersectionObserver(function (entries) {
-          if (entries[0].isIntersecting) mark(null);
+          if (entries[0].isIntersecting) mark("#main");
         }, { rootMargin: "-45% 0px -50% 0px" }).observe(hero);
       }
     }
   })();
 
   /* ------------------------------------------------------------------
-     4b. Testimonials: pick one with the bars underneath
+     4b. Certifications slider: the bars underneath, the arrow buttons,
+     the left / right arrow keys, and swiping
      ------------------------------------------------------------------ */
-  (function testimonials() {
+  (function certifications() {
+    var box = document.querySelector(".carousel");
     var quotes = Array.prototype.slice.call(document.querySelectorAll(".quote"));
     var dots = Array.prototype.slice.call(document.querySelectorAll(".quote-dot"));
+    if (!quotes.length) return;
+
+    function show(i) {
+      quotes.forEach(function (q, j) { q.classList.toggle("is-active", i === j); });
+      dots.forEach(function (d, j) { d.setAttribute("aria-pressed", i === j ? "true" : "false"); });
+    }
+
+    function current() {
+      for (var i = 0; i < quotes.length; i++) {
+        if (quotes[i].classList.contains("is-active")) return i;
+      }
+      return 0;
+    }
+
+    // Step forward (1) or back (-1), and wrap around at either end.
+    function go(step) {
+      show((current() + step + quotes.length) % quotes.length);
+    }
 
     dots.forEach(function (dot, i) {
-      dot.addEventListener("click", function () {
-        quotes.forEach(function (q, j) { q.classList.toggle("is-active", i === j); });
-        dots.forEach(function (d, j) { d.setAttribute("aria-pressed", i === j ? "true" : "false"); });
-      });
+      dot.addEventListener("click", function () { show(i); });
     });
+
+    var prev = box && box.querySelector(".carousel-arrow--prev");
+    var next = box && box.querySelector(".carousel-arrow--next");
+    var stage = box && box.querySelector(".quotes");
+    if (!prev || !next || !stage || quotes.length < 2) return;
+
+    // (stopImmediatePropagation: if an older inline copy of this slider is still in index.html,
+    // this keeps it from reacting a second time. That copy can be deleted.)
+    prev.addEventListener("click", function (e) { e.stopImmediatePropagation(); go(-1); });
+    next.addEventListener("click", function (e) { e.stopImmediatePropagation(); go(1); });
+
+    box.addEventListener("keydown", function (e) {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      go(e.key === "ArrowRight" ? 1 : -1);
+    });
+
+    // Swipe: a sideways drag of more than 50px across the card.
+    var startX = null;
+    stage.addEventListener("pointerdown", function (e) { startX = e.clientX; });
+    stage.addEventListener("pointerup", function (e) {
+      if (startX === null) return;
+      var dx = e.clientX - startX;
+      startX = null;
+      if (Math.abs(dx) > 50) {
+        e.stopImmediatePropagation();
+        go(dx < 0 ? 1 : -1);
+      }
+    });
+    stage.addEventListener("pointercancel", function () { startX = null; });
   })();
 
   /* ------------------------------------------------------------------

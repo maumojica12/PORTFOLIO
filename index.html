@@ -32,16 +32,30 @@
   </script>
 </head>
 <body>
+  <!-- Gradient used by the service icons. Colors come from the theme, so it follows light and dark mode. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="accent-grad" gradientUnits="userSpaceOnUse" x1="6" y1="6" x2="42" y2="42">
+        <stop offset="0" style="stop-color: var(--accent-2)"/>
+        <stop offset="0.36" style="stop-color: var(--g-pink)"/>
+        <stop offset="0.68" style="stop-color: var(--g-red)"/>
+        <stop offset="1" style="stop-color: var(--accent)"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
     <div class="wrap header-inner">
-      <a class="brand" href="#top">Your Name</a>
+      <a class="brand" href="#top">Maurienne Mojica</a>
       <div class="header-right">
         <nav aria-label="Main">
           <ul class="nav-list">
-            <li><a href="#work">Work</a></li>
-            <li><a href="#about">About</a></li>
+            <li><a href="#main">Home</a></li>
+            <li><a href="#work">Projects</a></li>
+            <li><a href="#certifications">Certifications</a></li>
+            <li><a href="#experience">Experiences</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
         </nav>
@@ -69,47 +83,132 @@
         <span class="blob b-cream"></span>
       </div>
 
-      <div class="wrap">
-        <!-- EDIT: one sentence that says what you do -->
-        <h1>I design and build websites that load fast and read clearly.</h1>
+      <div class="wrap hero-inner">
+        <!-- EDIT: your photo. Save it as profile.jpg next to this file (any roughly square crop works).
+             Until it exists, a gradient circle is shown instead. -->
+        <div class="hero-avatar">
+          <div class="hero-photo">
+            <img src="pic1.jpg" alt="Portrait of Your Name" width="480" height="480" fetchpriority="high" onerror="this.remove()">
+          </div>
+        </div>
 
-        <div class="hero-meta">
-          <!-- EDIT: location and availability -->
-          <p>Web developer based in Your City. Open to freelance projects and full-time roles.</p>
-          <ul class="hero-links">
-            <li><a href="mailto:hello@example.com">Email</a></li>
-            <li><a href="https://github.com/your-username" rel="noopener">GitHub</a></li>
-            <li><a href="https://www.linkedin.com/in/your-username" rel="noopener">LinkedIn</a></li>
-          </ul>
-          <a class="badge" href="#contact" aria-label="Available for new projects. Go to contact.">
-            <svg class="badge-ring" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-              <defs><path id="badge-path" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs>
-              <text><textPath href="#badge-path" textLength="284" lengthAdjust="spacing">Available for new projects / Say hello / </textPath></text>
+        <!-- EDIT: your name -->
+        <h1>Maurienne Marie Mojica</h1>
+
+        <!-- EDIT: your focus areas (one <span> each; the bars between them are added automatically) -->
+        <p class="hero-tagline">
+          <span>Cybersecurity</span>
+          <span>Software Development</span>
+          <span>Computer Networks</span>
+        </p>
+
+        <!-- EDIT: your degree and school. Each line keeps its parts together when it has to wrap. -->
+        <p class="hero-desc">
+          <span><span>BS Computer Science</span> <span>- Major in Network and Information Security</span></span>
+          <span><span>Minor in ICT for Business Agility</span> <span>at De La Salle University - Manila</span></span>
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn--solid" href="#work">View projects</a>
+          <a class="btn btn--ghost" href="#contact">Get in touch</a>
+        </div>
+
+        <!-- EDIT: your accounts. Change the links, and delete any you don't use. -->
+        <ul class="hero-links" aria-label="Find me elsewhere">
+          <li>
+            <a href="https://github.com/your-username" rel="noopener" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/your-username" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.com/users/your-user-id" rel="noopener" aria-label="Discord">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"/><path d="M14 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"/><path d="M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3"/><path d="M7 16.5c3.5 1 6.5 1 10 0"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/your-username" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:hello@example.com" aria-label="Email">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section" id="services" aria-labelledby="services-title">
+      <div class="wrap">
+        <h2 id="services-title">What I do</h2>
+
+        <!-- EDIT: change the three services, or copy a block to add more -->
+        <ul class="services">
+          <li class="service">
+            <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <circle cx="18" cy="18" r="11"/><rect x="18" y="18" width="22" height="22" rx="2"/>
             </svg>
-            <span class="badge-core" aria-hidden="true">
-              <svg viewBox="0 0 24 24" focusable="false"><path d="M12 2c.6 5.6 4.4 9.4 10 10-5.6.6-9.4 4.4-10 10-.6-5.6-4.4-9.4-10-10 5.6-.6 9.4-4.4 10-10z"/></svg>
-            </span>
-          </a>
+            <h3>Design</h3>
+            <p>Interfaces that are calm, clear, and easy to use. I sketch in the browser so what you approve is what ships.</p>
+            <p class="service-list">Interface design, prototypes, design systems</p>
+          </li>
+          <li class="service">
+            <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M16 14 6 24l10 10M32 14l10 10-10 10M27 10l-6 28"/>
+            </svg>
+            <h3>Development</h3>
+            <p>Websites and web apps built with plain, maintainable code that other developers can pick up without a tour.</p>
+            <p class="service-list">Front end, APIs, databases, deployment</p>
+          </li>
+          <li class="service">
+            <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M27 5 10 27h12l-3 16 19-24H26z"/>
+            </svg>
+            <h3>Performance</h3>
+            <p>Faster pages, better search rankings, and fewer people leaving before the page loads.</p>
+            <p class="service-list">Audits, accessibility fixes, Core Web Vitals</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="wrap">
+        <h2 id="about-title">About Me</h2>
+
+        <div class="about-grid">
+          <div class="prose">
+            <!-- EDIT: write in the first person, keep it short -->
+            <p>I'm a web developer with six years of experience building products for startups and small businesses. I care about pages that work on slow connections, on small screens, and with a keyboard.</p>
+            <p>I like working close to design, turning a rough sketch into something people can use. Outside of work I run, take film photos, and cook too much food on Sundays.</p>
+          </div>
+
+          <!-- Decorative: the same moving gradient as the hero. Delete this block to remove it. -->
+          <div class="about-art" aria-hidden="true">
+            <div class="hero-bg">
+              <span class="blob b-teal"></span>
+              <span class="blob b-orange"></span>
+              <span class="blob b-red"></span>
+              <span class="blob b-pink"></span>
+              <span class="blob b-void"></span>
+              <span class="blob b-cream"></span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- SKILLS BAND: EDIT the list. Keep the second copy identical so the loop is seamless. -->
-    <div class="marquee" role="group" aria-label="Skills and tools">
-      <div class="marquee-track">
-        <ul class="marquee-list">
-          <li>React</li><li>TypeScript</li><li>Accessibility</li><li>Node.js</li><li>Performance</li><li>Design systems</li><li>PostgreSQL</li><li>Next.js</li>
-        </ul>
-        <ul class="marquee-list" aria-hidden="true">
-          <li>React</li><li>TypeScript</li><li>Accessibility</li><li>Node.js</li><li>Performance</li><li>Design systems</li><li>PostgreSQL</li><li>Next.js</li>
-        </ul>
-      </div>
-    </div>
-
     <!-- WORK -->
     <section class="section" id="work" aria-labelledby="work-title">
       <div class="wrap">
-        <h2 id="work-title">Selected work</h2>
+        <h2 id="work-title">Projects</h2>
 
         <!-- EDIT: copy one <li class="project"> block per project. Give each one a unique id (project-1, project-2...) and match aria-controls to it. Clicking a row opens its details. -->
         <ul class="projects">
@@ -193,52 +292,65 @@
       </div>
     </section>
 
-
-    <!-- SERVICES -->
-    <section class="section" id="services" aria-labelledby="services-title">
+    <section class="section" id="certifications" aria-labelledby="certifications-title">
       <div class="wrap">
-        <h2 id="services-title">What I do</h2>
-
-        <!-- EDIT: change the three services, or copy a block to add more -->
-        <ul class="services">
-          <li class="service">
-            <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-              <circle cx="18" cy="18" r="11"/><rect x="18" y="18" width="22" height="22" rx="2"/>
-            </svg>
-            <h3>Design</h3>
-            <p>Interfaces that are calm, clear, and easy to use. I sketch in the browser so what you approve is what ships.</p>
-            <p class="service-list">Interface design, prototypes, design systems</p>
-          </li>
-          <li class="service">
-            <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-              <path d="M16 14 6 24l10 10M32 14l10 10-10 10M27 10l-6 28"/>
-            </svg>
-            <h3>Development</h3>
-            <p>Websites and web apps built with plain, maintainable code that other developers can pick up without a tour.</p>
-            <p class="service-list">Front end, APIs, databases, deployment</p>
-          </li>
-          <li class="service">
-            <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-              <path d="M27 5 10 27h12l-3 16 19-24H26z"/>
-            </svg>
-            <h3>Performance</h3>
-            <p>Faster pages, better search rankings, and fewer people leaving before the page loads.</p>
-            <p class="service-list">Audits, accessibility fixes, Core Web Vitals</p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section class="section" id="about" aria-labelledby="about-title">
-      <div class="wrap">
-        <h2 id="about-title">About</h2>
-
-        <div class="about-grid">
-          <div class="prose">
-            <!-- EDIT: write in the first person, keep it short -->
-            <p>I'm a web developer with six years of experience building products for startups and small businesses. I care about pages that work on slow connections, on small screens, and with a keyboard.</p>
-            <p>I like working close to design, turning a rough sketch into something people can use. Outside of work I run, take film photos, and cook too much food on Sundays.</p>
+        <h2 id="certifications-title">Certifications &amp; Achievements</h2>
+ 
+        <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Certifications and achievements">
+          <button class="carousel-arrow carousel-arrow--prev" type="button" aria-label="Previous">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </button>
+ 
+          <div class="quotes">
+            <figure class="quote cert is-active">
+              <div class="cert-art" aria-hidden="true">
+                <!-- Optional: <img src="certificate-1.jpg" alt=""> covers the gradient with a picture of the certificate -->
+                <span class="cert-icon"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span>
+              </div>
+              <figcaption class="cert-body">
+                <p class="cert-type">Certification</p>
+                <h3>Certification Name</h3>
+                <p class="cert-meta">Issuing Organization · Month 2026</p>
+                <p class="cert-desc">What it covers and the skills it proves, in one or two lines.</p>
+                <a class="cert-link" href="https://example.com/credential" rel="noopener">View credential <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+              </figcaption>
+            </figure>
+ 
+            <figure class="quote cert">
+              <div class="cert-art" style="--fx: -1" aria-hidden="true">
+                <span class="cert-icon"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
+              </div>
+              <figcaption class="cert-body">
+                <p class="cert-type">Achievement</p>
+                <h3>Achievement or Award Title</h3>
+                <p class="cert-meta">Event or School · 2026</p>
+                <p class="cert-desc">What you did and why it mattered, in one or two lines.</p>
+                <a class="cert-link" href="https://example.com/details" rel="noopener">See details <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+              </figcaption>
+            </figure>
+ 
+            <figure class="quote cert">
+              <div class="cert-art" style="--fy: -1" aria-hidden="true">
+                <span class="cert-icon"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></span>
+              </div>
+              <figcaption class="cert-body">
+                <p class="cert-type">Certification</p>
+                <h3>Another Certification</h3>
+                <p class="cert-meta">Issuing Organization · Month 2025</p>
+                <p class="cert-desc">What it covers and the skills it proves, in one or two lines.</p>
+                <a class="cert-link" href="https://example.com/credential" rel="noopener">View credential <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+              </figcaption>
+            </figure>
+          </div>
+ 
+          <button class="carousel-arrow carousel-arrow--next" type="button" aria-label="Next">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+ 
+          <div class="quote-nav" role="group" aria-label="Choose a certification">
+            <button class="quote-dot" type="button" aria-label="Show item 1 of 3" aria-pressed="true"></button>
+            <button class="quote-dot" type="button" aria-label="Show item 2 of 3" aria-pressed="false"></button>
+            <button class="quote-dot" type="button" aria-label="Show item 3 of 3" aria-pressed="false"></button>
           </div>
         </div>
       </div>
@@ -247,7 +359,7 @@
     <!-- EXPERIENCE -->
     <section class="section" id="experience" aria-labelledby="experience-title">
       <div class="wrap">
-        <h2 id="experience-title">Experience</h2>
+        <h2 id="experience-title">Experiences</h2>
 
         <!-- EDIT: newest first -->
         <ol class="timeline">
@@ -277,36 +389,18 @@
     </section>
 
 
-    <!-- TESTIMONIALS: EDIT names and quotes -->
-    <section class="section" id="testimonials" aria-labelledby="testimonials-title">
-      <div class="wrap">
-        <h2 id="testimonials-title">Kind words</h2>
-
-        <div class="quotes">
-          <figure class="quote is-active">
-            <blockquote><p>Working with Your Name was the easiest part of the project. They asked the right questions, shipped early, and the site has been fast and stable since launch.</p></blockquote>
-            <figcaption><strong>Casey Morgan</strong> Founder, Studio Name</figcaption>
-          </figure>
-          <figure class="quote">
-            <blockquote><p>Our reporting went from a day of spreadsheets to ten minutes. The team actually enjoys using it.</p></blockquote>
-            <figcaption><strong>Priya Shah</strong> Operations lead, Retail Co</figcaption>
-          </figure>
-          <figure class="quote">
-            <blockquote><p>It's rare to find someone who cares about design details and accessibility as much as they care about code.</p></blockquote>
-            <figcaption><strong>Daniel Okafor</strong> Design director, Agency Name</figcaption>
-          </figure>
-        </div>
-
-        <div class="quote-nav" role="group" aria-label="Choose a testimonial">
-          <button class="quote-dot" type="button" aria-label="Show testimonial 1 of 3" aria-pressed="true"></button>
-          <button class="quote-dot" type="button" aria-label="Show testimonial 2 of 3" aria-pressed="false"></button>
-          <button class="quote-dot" type="button" aria-label="Show testimonial 3 of 3" aria-pressed="false"></button>
-        </div>
-      </div>
-    </section>
-
     <!-- CONTACT -->
     <section class="section section--contact" id="contact" aria-labelledby="contact-title">
+      <!-- Same moving gradient as the hero -->
+      <div class="hero-bg" aria-hidden="true">
+        <span class="blob b-teal"></span>
+        <span class="blob b-orange"></span>
+        <span class="blob b-red"></span>
+        <span class="blob b-pink"></span>
+        <span class="blob b-void"></span>
+        <span class="blob b-cream"></span>
+      </div>
+
       <div class="wrap">
         <h2 id="contact-title">Contact</h2>
         <p class="contact-lead">Have a project in mind? Send me a note and I'll reply within two working days.</p>

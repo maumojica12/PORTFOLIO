@@ -16,12 +16,20 @@
   --inv-muted: #a3a3a3;
   --dim: #595959;
 
-  /* Orange is the main accent. Blue is the small complement for "you are here" and status. */
+  /* Orange is the main accent. Teal is the small complement for "you are here" and status. */
   --accent: #ff5a00;      /* fills, lines, icons */
   --accent-ink: #c2410c;  /* orange used as small text on the page background */
-  --accent-2: #1a2cff;
+  --accent-2: #0a6f9c;    /* teal */
   --inv-accent: #ff7a1a;  /* orange as seen on an inverted (hovered or open) row */
   --line-2: #bdbdbd;
+
+  /* Gradient accents, from the hero palette: teal, pink, red and orange.
+     Used for thin lines, icons and small marks on the page. */
+  --g-pink: #c2377f;
+  --g-red: #d93a24;
+  --grad: linear-gradient(90deg, var(--accent-2), var(--g-pink) 36%, var(--g-red) 68%, var(--accent));
+  /* A small orb: the hero's stacked bands in miniature (teal, dark band, orange, red, pink) */
+  --orb: linear-gradient(180deg, var(--accent-2) 0%, #0a2233 32%, var(--accent) 58%, var(--g-red) 79%, var(--g-pink) 100%);
 
   /* One typeface for everything. Change it here and it changes everywhere. */
   --font: "Switzer", "Helvetica Neue", Arial, sans-serif;
@@ -47,7 +55,9 @@
     --dim: #a3a3a3;
     --accent: #ff6a1a;
     --accent-ink: #ff8a3d;
-    --accent-2: #8593ff;
+    --accent-2: #3bb4e6;
+    --g-pink: #e05aa0;
+    --g-red: #ff5238;
     --inv-accent: #c2410c;
     --line-2: #444444;
     color-scheme: dark;
@@ -65,10 +75,24 @@
   --dim: #a3a3a3;
   --accent: #ff6a1a;
   --accent-ink: #ff8a3d;
-  --accent-2: #8593ff;
+  --accent-2: #3bb4e6;
+  --g-pink: #e05aa0;
+  --g-red: #ff5238;
   --inv-accent: #c2410c;
   --line-2: #444444;
   color-scheme: dark;
+}
+
+/* One percent of the visible screen height (svh where supported, so phone toolbars are accounted for).
+   The hero is sized from this as well as from the width, so it always fits on screen. */
+:root {
+  --vh: 1vh;
+}
+
+@supports (height: 1svh) {
+  :root {
+    --vh: 1svh;
+  }
 }
 
 /* ==========================================================================
@@ -188,6 +212,19 @@ h3 {
   font-size: 1.1rem;
   letter-spacing: -0.01em;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Small orb: the hero gradient in miniature */
+.brand::before {
+  content: "";
+  flex: none;
+  width: 0.85em;
+  height: 0.85em;
+  border-radius: 50%;
+  background: var(--orb);
 }
 
 .header-right {
@@ -202,15 +239,18 @@ h3 {
 }
 
 .nav-list a {
+  padding-block: 0.3rem;
   font-family: var(--display);
   font-weight: 500;
   font-size: 0.98rem;
   text-decoration: none;
+  /* Gradient underline: draws in on hover and stays on for the section in view */
+  background: var(--grad) 0 100% / 0 2px no-repeat;
+  transition: background-size 0.3s ease;
 }
 
 .nav-list a:hover {
-  text-decoration: underline;
-  text-decoration-thickness: 0.08em;
+  background-size: 100% 2px;
 }
 
 .theme-toggle {
@@ -239,32 +279,34 @@ h3 {
 }
 
 
-/* Thin reading-progress line under the header */
+/* Thin reading-progress line under the header. --p goes from 0 to 1 as you scroll,
+   and the gradient is revealed from the left rather than squeezed. */
 .progress {
   position: absolute;
   left: 0;
   right: 0;
   bottom: -1px;
-  height: 2px;
-  background: var(--accent);
-  transform: scaleX(var(--p, 0));
-  transform-origin: left;
+  height: 3px;
+  background: var(--grad);
+  clip-path: inset(0 calc((1 - var(--p, 0)) * 100%) 0 0);
 }
 
 /* Underline the link for the section in view */
 .nav-list a[aria-current="true"] {
-  text-decoration: underline;
-  text-decoration-color: var(--accent-2);
-  text-decoration-thickness: 0.14em;
+  background-size: 100% 2px;
 }
 
 /* ==========================================================================
    Hero
    ========================================================================== */
 
-/* The hero is a dark canvas in both light and dark mode, so white text stays readable
-   over the deep blues and blacks of the gradient. Everything below the hero follows the theme. */
-.hero {
+/* The hero and the contact panel are dark canvases in both light and dark mode, so white text
+   stays readable over the deep blues and blacks of the gradient. The page opens and closes on
+   the same moving gradient; everything in between follows the theme. */
+.hero,
+.section--contact,
+.about-art,
+.cert-art {
   --fg: #ffffff;
   --bg: #000000;
   --spot-dim: rgba(255, 255, 255, 0.62);   /* headline outside the hover spotlight */
@@ -273,51 +315,234 @@ h3 {
   /* Gradient palette, sampled from the reference image */
   --c-teal: #0a6f9c;
   --c-void: #020a12;
-  --c-orange: #d4640f;
+  --c-orange: #b8540c;
   --c-red: #b81e02;
   --c-pink: #a9225a;
   --c-cream: #dab487;
+
+  /* Bright tones for lines and marks that sit on the canvas (the page tokens are tuned for white) */
+  --accent: #ff6a1a;
+  --accent-2: #3bb4e6;
+  --g-pink: #e05aa0;
+  --g-red: #ff5238;
+  --grad: linear-gradient(90deg, var(--accent-2), var(--g-pink) 36%, var(--g-red) 68%, var(--accent));
 
   position: relative;
   isolation: isolate;
   overflow: hidden;
   background: #000000;
   color: var(--fg);
-  padding-block: clamp(3.5rem, 11vw, 8.5rem) clamp(3.5rem, 9vw, 7rem);
+}
+
+.hero {
+  /* One screen: the hero fills whatever is left under the header, and everything inside it is
+     sized from the screen height as well as the width, so nothing needs scrolling to be seen. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - var(--header-h) - 1px);
+  min-height: calc(100svh - var(--header-h) - 1px);
+  padding-block: clamp(1rem, calc(var(--vh) * 3), 2.5rem);
+}
+
+/* Everything in the hero sits in one centered column:
+   photo, name, intro, buttons, accounts. */
+.hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Photo with a thin ring and a bright highlight that circles it */
+.hero-avatar {
+  --photo: clamp(7rem, min(calc(var(--vh) * 30), 34vw), 15rem);
+  --gap: 0.45rem;  /* space between the photo and the ring */
+  --w: 3px;        /* ring thickness */
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: calc(var(--photo) + 2 * (var(--gap) + var(--w)));
+  aspect-ratio: 1;
+}
+
+.hero-avatar::before,
+.hero-avatar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  /* keep only a thin ring of the fill */
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--w)), #000 calc(100% - var(--w) + 0.5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--w)), #000 calc(100% - var(--w) + 0.5px));
+}
+
+.hero-avatar::before {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.hero-avatar::after {
+  background: conic-gradient(from 0deg, transparent 0 60%, rgba(255, 255, 255, 0.25) 80%, #ffffff 100%);
+  animation: spin 3.6s linear infinite;
+}
+
+.hero-photo {
+  width: var(--photo);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--orb); /* shows until profile.jpg is added */
+  box-shadow: 0 1.25rem 3rem rgba(0, 0, 0, 0.4);
+}
+
+.hero-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Framing. --shift-x / --shift-y move the photo inside the circle (negative = left / up,
+     positive = right / down). --zoom is how close it is; keep it a little above 1 so the edges
+     stay covered when the photo is moved. */
+  --shift-x: -4%;
+  --shift-y: -4%;
+  --zoom: 1.12;
+  transform: scale(var(--zoom)) translate(var(--shift-x), var(--shift-y));
 }
 
 .hero h1 {
-  font-size: clamp(2.4rem, 0.9rem + 6.4vw, 6.5rem);
-  line-height: 1.02;
+  margin-top: clamp(0.8rem, calc(var(--vh) * 2.4), 1.4rem);
+  font-size: clamp(2.25rem, min(9vw, calc(var(--vh) * 7.5)), 4.25rem);
+  line-height: 1;
   letter-spacing: -0.035em;
-  text-wrap: balance;
 }
 
-.hero-meta {
-  display: grid;
-  grid-template-columns: minmax(0, 28rem) auto auto;
-  justify-content: space-between;
-  align-items: end;
-  gap: 1.75rem 3rem;
-  margin-top: clamp(2.5rem, 6vw, 5rem);
+/* Focus areas, one <span> each, separated by thin bars. Each stays on a single line. */
+.hero-tagline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: clamp(0.55rem, calc(var(--vh) * 1.6), 1rem) 0 0;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(1.05rem, min(3.6vw, calc(var(--vh) * 2.5)), 1.35rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: #fff4e6;
 }
 
-/* Full-strength text here: grey copy is hard to read on top of the orange gradient */
-.hero-meta p {
-  margin: 0;
+.hero-tagline span {
+  white-space: nowrap;
+}
+
+.hero-tagline span + span::before {
+  content: "|";
+  content: "|" / "";
+  margin-inline: 0.7em;
+  opacity: 0.6;
+}
+
+/* Full-strength text: grey copy is hard to read on top of the orange gradient.
+   Each line is a block, and its parts stay together, so it only ever breaks between them. */
+.hero-desc {
+  margin: clamp(0.65rem, calc(var(--vh) * 1.8), 1.1rem) 0 0;
+  max-width: 44rem;
+  font-size: clamp(0.95rem, min(3.4vw, calc(var(--vh) * 2.1)), 1.05rem);
+  line-height: 1.5;
   color: var(--fg);
 }
 
+.hero-desc > span {
+  display: block;
+}
+
+.hero-desc > span > span {
+  display: inline-block;
+}
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: clamp(1.1rem, calc(var(--vh) * 3.4), 1.9rem);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.4rem;
+  border: 1.5px solid var(--fg);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn--solid {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--fg);
+}
+
+/* Hovering keeps everything plain white: the buttons and icons just lift a little */
+.hero .btn:hover {
+  transform: translateY(-2px);
+}
+
+.hero .btn--solid:hover {
+  background: var(--fg);
+  color: var(--bg);
+  box-shadow: 0 0.6rem 1.6rem rgba(0, 0, 0, 0.3);
+}
+
+.hero .btn--ghost:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* Links to your other accounts */
 .hero-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.75rem;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: clamp(0.9rem, calc(var(--vh) * 2.6), 1.5rem);
 }
 
 .hero-links a {
-  font-family: var(--display);
-  font-weight: 500;
-  font-size: 1.1rem;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  color: var(--fg);
+  text-decoration: none;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.hero-links svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hero .hero-links a:hover {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+  transform: translateY(-3px);
 }
 
 /* Orange links, focus rings and selections would disappear on the orange gradient,
@@ -376,16 +601,17 @@ h3 {
   }
 }
 
-/* One entrance on page load, nothing after that */
+/* One entrance on page load: the hero stack rises in, one piece after another */
 @media (prefers-reduced-motion: no-preference) {
-  .hero h1,
-  .hero-meta {
+  .hero-inner > * {
     animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 
-  .hero-meta {
-    animation-delay: 0.18s;
-  }
+  .hero-inner > :nth-child(2) { animation-delay: 0.08s; }
+  .hero-inner > :nth-child(3) { animation-delay: 0.16s; }
+  .hero-inner > :nth-child(4) { animation-delay: 0.24s; }
+  .hero-inner > :nth-child(5) { animation-delay: 0.32s; }
+  .hero-inner > :nth-child(6) { animation-delay: 0.4s; }
 
   @keyframes rise {
     from {
@@ -518,64 +744,6 @@ h3 {
   50%      { transform: translate(-6%, 70%) scale(1.2); }
 }
 
-/* ---------- Rotating badge ---------- */
-
-.badge {
-  position: relative;
-  display: block;
-  width: 7.5rem;
-  height: 7.5rem;
-  border-radius: 50%;
-  color: var(--fg);
-  text-decoration: none;
-}
-
-.badge:hover {
-  color: var(--fg);
-}
-
-.badge-ring {
-  display: block;
-  width: 100%;
-  height: 100%;
-  animation: spin 26s linear infinite;
-}
-
-.badge-ring text {
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: 11.5px;
-  fill: currentColor;
-}
-
-.badge:hover .badge-ring {
-  animation-play-state: paused;
-}
-
-/* Text-colored core so it stands out against the orange gradient */
-.badge-core {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  display: grid;
-  place-items: center;
-  width: 2.9rem;
-  height: 2.9rem;
-  border-radius: 50%;
-  background: var(--fg);
-  transition: transform 0.3s ease;
-}
-
-.badge-core svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: var(--bg);
-}
-
-.badge:hover .badge-core {
-  transform: scale(1.18);
-}
-
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
@@ -653,11 +821,28 @@ h3 {
   scroll-margin-top: var(--header-h);
 }
 
+/* The Home link and the name link scroll to the very top, instead of leaving the top of the hero
+   tucked under the sticky header. */
+#main,
+#top {
+  scroll-margin-top: calc(var(--header-h) + 1px);
+}
+
 .section h2 {
   font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
   letter-spacing: -0.02em;
   line-height: 1.1;
   margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+/* Short gradient bar above each section title */
+.section h2::before {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 4px;
+  margin-bottom: 1.1rem;
+  background: var(--grad);
 }
 
 /* ---------- Work ---------- */
@@ -672,8 +857,35 @@ h3 {
   --row-muted: var(--muted);
   --row-accent: var(--accent);
   --row-ink: var(--accent-ink);
+  position: relative;
   margin-inline: calc(var(--row-pad) * -1);
   border-top: 1px solid var(--line);
+}
+
+/* Gradient rule along the bottom edge of a row that is open, focused or hovered */
+.project::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 3px;
+  background: var(--grad);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  pointer-events: none;
+}
+
+.project.is-open::after,
+.project:has(:focus-visible)::after {
+  transform: scaleX(1);
+}
+
+@media (hover: hover) {
+  .project:hover::after {
+    transform: scaleX(1);
+  }
 }
 
 .project-head {
@@ -863,6 +1075,12 @@ h3 {
   margin-bottom: 0;
 }
 
+/* A window onto the same moving gradient, in the space beside the intro text */
+.about-art {
+  min-height: 16rem;
+  align-self: stretch;
+}
+
 /* ---------- Experience ---------- */
 
 .timeline > li {
@@ -887,12 +1105,12 @@ h3 {
 .when.is-current::before {
   content: "";
   display: inline-block;
-  width: 0.55rem;
-  height: 0.55rem;
+  width: 0.7rem;
+  height: 0.7rem;
   margin-right: 0.6rem;
   border-radius: 50%;
-  background: var(--accent);
-  vertical-align: 0.05em;
+  background: var(--orb);
+  vertical-align: 0.02em;
 }
 
 .timeline h3 {
@@ -981,7 +1199,7 @@ h3 {
   border-top: 1px solid var(--line);
 }
 
-/* Orange rule draws across the top on hover */
+/* Gradient rule draws across the top on hover */
 .service::before {
   content: "";
   position: absolute;
@@ -989,7 +1207,7 @@ h3 {
   top: -1px;
   width: 100%;
   height: 3px;
-  background: var(--accent);
+  background: var(--grad);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -1005,6 +1223,8 @@ h3 {
   height: 3rem;
   margin-bottom: 1.5rem;
   color: var(--accent);
+  /* Gradient stroke, defined once in index.html (#accent-grad). Falls back to orange. */
+  stroke: url(#accent-grad) var(--accent);
   transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
@@ -1031,8 +1251,77 @@ h3 {
   color: var(--fg);
 }
 
-/* ---------- Testimonials ---------- */
+/* ---------- Certifications & achievements (slider) ---------- */
 
+/* Arrow buttons, cards and dots share one grid.
+   Wide screens: an arrow on each side of the card, dots underneath.
+   Narrow screens: the card on top, then arrow / dots / arrow in one row. */
+.carousel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "prev quotes next"
+    ".    dots   .";
+  align-items: center;
+  gap: 1.75rem 1.25rem;
+}
+
+.carousel .quotes {
+  grid-area: quotes;
+  overflow-x: clip; /* cards slide in and out of this window instead of widening the page */
+  touch-action: pan-y; /* vertical scrolling still works while you swipe sideways */
+}
+
+.carousel-arrow--prev {
+  grid-area: prev;
+}
+
+.carousel-arrow--next {
+  grid-area: next;
+}
+
+.carousel .quote-nav {
+  grid-area: dots;
+  justify-content: center;
+  margin-top: 0;
+}
+
+/* Big, solid arrows: the text color as a fill, so they stand out in light and dark mode */
+.carousel-arrow {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border: 2px solid var(--fg);
+  border-radius: 50%;
+  background: var(--fg);
+  color: var(--bg);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.carousel-arrow svg {
+  width: 1.6rem;
+  height: 1.6rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.carousel-arrow:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.25);
+}
+
+.carousel-arrow:active {
+  transform: scale(0.95);
+}
+
+/* The cards sit on top of each other. The active one is visible; the others wait on its left
+   (earlier cards) or right (later cards), so every change of slide moves in the right direction. */
 .quotes {
   display: grid;
 }
@@ -1041,56 +1330,23 @@ h3 {
   grid-area: 1 / 1;
   position: relative;
   margin: 0;
-  padding-top: 4.5rem;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(0.75rem);
-  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s linear 0.4s;
+  transform: translateX(4rem);
+  /* The card leaving fades out quickly... */
+  transition: opacity 0.25s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0.5s;
 }
 
+.quote:has(~ .quote.is-active) {
+  transform: translateX(-4rem);
+}
+
+/* ...and the card arriving waits a beat before fading in, so the two never overlap */
 .quote.is-active {
   opacity: 1;
   visibility: visible;
   transform: none;
-  transition-delay: 0s;
-}
-
-/* Large orange quotation mark */
-.quote::before {
-  content: "\201C";
-  position: absolute;
-  left: -0.05em;
-  top: 0;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 8rem;
-  line-height: 0.8;
-  color: var(--accent);
-}
-
-.quote blockquote {
-  margin: 0;
-}
-
-.quote blockquote p {
-  margin: 0;
-  max-width: 44rem;
-  font-style: italic;
-  font-size: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-}
-
-.quote figcaption {
-  margin-top: 1.5rem;
-  color: var(--muted);
-}
-
-.quote figcaption strong {
-  display: block;
-  font-family: var(--display);
-  font-weight: 600;
-  color: var(--fg);
+  transition: opacity 0.35s ease 0.2s, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s;
 }
 
 .quote-nav {
@@ -1126,43 +1382,190 @@ h3 {
 }
 
 .quote-dot[aria-pressed="true"]::after {
-  background: var(--accent);
+  background: var(--grad);
 }
 
-/* ---------- Contact: orange panel ---------- */
+/* One certification or achievement: a gradient panel with an icon, and the details beside it */
+.cert {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+  min-height: 16rem;
+  border: 1px solid var(--line);
+}
 
-.section--contact {
-  --fg: #000;
-  --bg: var(--accent);
-  --muted: #2b1200;
-  --line: rgba(0, 0, 0, 0.3);
-  border-top: 0;
+.cert::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 3px;
+  background: var(--grad);
+}
+
+.cert-art {
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+}
+
+/* A still from the hero gradient. Cards can be mirrored for variety (--fx / --fy = -1). */
+.cert-art::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background:
-    repeating-radial-gradient(
-      circle at 100% 100%,
-      transparent 0 3.25rem,
-      rgba(0, 0, 0, 0.16) 3.25rem calc(3.25rem + 1px)
-    ),
-    var(--accent);
-  color: #000;
+    radial-gradient(ellipse 52% 32% at 50% 20%, var(--c-void) 40%, transparent 100%),
+    radial-gradient(ellipse 70% 36% at 62% 104%, var(--c-pink) 30%, transparent 100%),
+    radial-gradient(ellipse 130% 42% at 60% 82%, var(--c-red) 45%, transparent 100%),
+    radial-gradient(ellipse 130% 40% at 40% 52%, var(--c-orange) 45%, transparent 100%),
+    var(--c-teal);
+  transform: scale(var(--fx, 1), var(--fy, 1));
+}
+
+/* Optional: put a picture of the certificate or badge here and it covers the gradient */
+.cert-art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cert-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 5.25rem;
+  height: 5.25rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.cert-icon svg {
+  width: 2.4rem;
+  height: 2.4rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cert-body {
+  align-self: center;
+  padding: clamp(1.5rem, 3.2vw, 2.75rem);
+}
+
+.cert-type {
+  margin: 0 0 0.6rem;
+  font-family: var(--display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+
+.cert h3 {
+  font-size: clamp(1.4rem, 1rem + 1.4vw, 2.1rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.cert-meta {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+}
+
+.cert-desc {
+  margin: 1rem 0 0;
+  max-width: 34rem;
+  color: var(--muted);
+}
+
+.cert-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding-bottom: 0.2rem;
+  font-family: var(--display);
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--grad) 0 100% / 100% 2px no-repeat;
+}
+
+.cert-link svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s ease;
+}
+
+.cert-link:hover svg {
+  transform: translateX(4px);
+}
+
+@media (max-width: 46rem) {
+  .carousel {
+    grid-template-areas:
+      "quotes quotes quotes"
+      "prev   dots   next";
+    gap: 1.25rem 0.75rem;
+  }
+
+  .carousel-arrow {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+@media (max-width: 34rem) {
+  .cert {
+    grid-template-columns: 1fr;
+  }
+
+  .cert-art {
+    min-height: 8.5rem;
+  }
+}
+
+/* ---------- Contact: gradient canvas ---------- */
+
+/* Dark canvas and moving gradient shared with the hero (see above). The gradient layers sit in
+   a .hero-bg inside the section, mirrored left to right so it doesn't look like a copy. */
+.section--contact {
+  --muted: rgba(255, 255, 255, 0.94);
+  --line: rgba(255, 255, 255, 0.3);
+  border-top: 0;
+}
+
+.section--contact .hero-bg {
+  transform: scaleX(-1);
 }
 
 .section--contact a {
-  text-decoration-color: #000;
+  text-decoration-color: var(--fg);
 }
 
 .section--contact a:hover,
 .section--contact .copy-btn:hover {
-  color: #000;
+  color: var(--fg);
 }
 
 .section--contact :focus-visible {
-  outline-color: #000;
+  outline-color: var(--fg);
 }
 
 .section--contact ::selection {
-  background: #000;
-  color: var(--accent);
+  background: var(--fg);
+  color: var(--bg);
 }
 
 .section--contact .big-mail {
@@ -1171,18 +1574,18 @@ h3 {
 }
 
 .section--contact .big-mail:hover {
-  background: #000;
-  color: var(--accent);
+  background: var(--fg);
+  color: var(--bg);
   text-decoration: none;
 }
 
 .section--contact .copy-btn {
-  color: #000;
-  text-decoration-color: #000;
+  color: var(--fg);
+  text-decoration-color: var(--fg);
 }
 
 .section--contact .copy-status {
-  color: #000;
+  color: var(--fg);
 }
 
 /* ==========================================================================
@@ -1212,20 +1615,8 @@ h3 {
    ========================================================================== */
 
 @media (max-width: 52rem) {
-  .hero-meta {
-    grid-template-columns: 1fr;
-  }
-
-  .badge {
-    display: none;
-  }
-
   .services {
     grid-template-columns: 1fr;
-  }
-
-  .quote::before {
-    font-size: 6rem;
   }
 
   .project-head {
@@ -1268,8 +1659,101 @@ h3 {
     grid-template-columns: 1fr;
   }
 
+  .about-art {
+    min-height: 11rem;
+  }
+
   .timeline > li {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 46rem) {
+  :root {
+    --header-h: 5rem;
+  }
+
+  /* Five links don't fit beside the name, so they go on a second row under it.
+     The name and the theme button stay together on the first row. */
+  .header-inner {
+    flex-wrap: wrap;
+    align-content: center;
+    row-gap: 0.15rem;
+  }
+
+  .header-right {
+    display: contents;
+  }
+
+  .brand {
+    order: 1;
+  }
+
+  .theme-toggle {
+    order: 2;
+  }
+
+  .header-right > nav {
+    order: 3;
+    flex: 0 0 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .header-right > nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-list {
+    justify-content: space-between;
+  }
+
+  .hero-tagline {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-tagline span + span::before {
+    display: none;
+  }
+}
+
+/* Short screens (small phones with their toolbars showing): tighter sizes so the hero still fits */
+@media (max-height: 620px) {
+  .hero-avatar {
+    --photo: clamp(5.25rem, min(calc(var(--vh) * 24), 34vw), 15rem);
+    --gap: 0.3rem;
+  }
+
+  .hero h1 {
+    margin-top: 0.5rem;
+    font-size: clamp(1.9rem, min(9vw, calc(var(--vh) * 7.5)), 4.25rem);
+  }
+
+  .hero-tagline {
+    margin-top: 0.35rem;
+  }
+
+  .hero-desc {
+    margin-top: 0.45rem;
+    line-height: 1.4;
+  }
+
+  .hero-cta {
+    margin-top: 0.8rem;
+  }
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+  }
+
+  .hero-links {
+    margin-top: 0.65rem;
+  }
+
+  .hero-links a {
+    width: 2.3rem;
+    height: 2.3rem;
   }
 }
 
@@ -1278,12 +1762,46 @@ h3 {
     font-size: 1.05rem;
   }
 
+  /* Tighter header so the name never wraps onto two lines */
+  .header-inner {
+    column-gap: 0.6rem;
+  }
+
+  .header-right {
+    gap: 0.6rem;
+  }
+
   .brand {
-    font-size: 1rem;
+    font-size: 0.95rem;
+    gap: 0.45rem;
+    white-space: nowrap;
+  }
+
+  .nav-list {
+    gap: 0.7rem;
   }
 
   .nav-list a {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
+  }
+
+  .theme-toggle {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+}
+
+@media (max-width: 22rem) {
+  .brand {
+    font-size: 0.88rem;
+  }
+
+  .nav-list {
+    gap: 0.5rem;
+  }
+
+  .nav-list a {
+    font-size: 0.8rem;
   }
 }
 
@@ -1298,9 +1816,17 @@ h3 {
 
 @media (prefers-reduced-motion: reduce) {
   .blob,
-  .badge-ring,
   .marquee-track {
     animation: none;
+  }
+
+  /* No circling highlight: a steady, slightly stronger ring instead */
+  .hero-avatar::after {
+    display: none;
+  }
+
+  .hero-avatar::before {
+    background: rgba(255, 255, 255, 0.55);
   }
 
   /* The band becomes a static, wrapping list and the duplicate copy is hidden */
@@ -1318,10 +1844,15 @@ h3 {
   }
 
   .quote,
+  .carousel-arrow,
+  .cert-link svg,
   .quote-dot::after,
   .service::before,
   .service-icon,
-  .badge-core {
+  .project::after,
+  .nav-list a,
+  .btn,
+  .hero-links a {
     transition: none;
   }
 }
