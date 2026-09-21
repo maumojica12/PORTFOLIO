@@ -150,6 +150,34 @@
   })();
 
   /* ------------------------------------------------------------------
+     3b. Service cards (mouse and pen only)
+     The glow and the lit border follow the pointer across a card, and the artwork drifts a little with it.
+     ------------------------------------------------------------------ */
+  (function services() {
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".service"));
+    var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!cards.length || !canHover || reduceMotion.matches) return;
+
+    cards.forEach(function (card) {
+      card.addEventListener("pointermove", function (e) {
+        var box = card.getBoundingClientRect();
+        var x = e.clientX - box.left;
+        var y = e.clientY - box.top;
+        card.style.setProperty("--mx", x + "px");
+        card.style.setProperty("--my", y + "px");
+        card.style.setProperty("--px", (x / box.width).toFixed(3));
+        card.style.setProperty("--py", (y / box.height).toFixed(3));
+      });
+
+      // Pointer leaves: the artwork eases back to the middle.
+      card.addEventListener("pointerleave", function () {
+        card.style.setProperty("--px", "0.5");
+        card.style.setProperty("--py", "0.5");
+      });
+    });
+  })();
+
+  /* ------------------------------------------------------------------
      4. Reading progress line and current-section link in the nav
      ------------------------------------------------------------------ */
   (function scrollUI() {

@@ -306,7 +306,8 @@ h3 {
 .hero,
 .section--contact,
 .about-art,
-.cert-art {
+.cert-art,
+.service-art {
   --fg: #ffffff;
   --bg: #000000;
   --spot-dim: rgba(255, 255, 255, 0.62);   /* headline outside the hover spotlight */
@@ -1187,56 +1188,317 @@ h3 {
 
 /* ---------- Services ---------- */
 
+/* A faint dotted grid and two soft color glows behind the whole section */
+#services {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Title on the left, a short intro on the right */
+.section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 27rem);
+  align-items: end;
+  gap: 1.25rem clamp(2rem, 6vw, 5rem);
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.section-head h2 {
+  margin-bottom: 0;
+}
+
+.section-lead {
+  margin: 0;
+  color: var(--muted);
+}
+
 .services {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0 clamp(1.5rem, 4vw, 3rem);
+  gap: clamp(1rem, 2vw, 1.5rem);
 }
 
+/* A card: gradient artwork on top, an icon badge set into its edge, then the details.
+   With a mouse, a glow and a lit border follow the pointer, the artwork drifts and comes alive,
+   the icon redraws itself, the tags lift in turn, and a gradient rule sweeps along the bottom.
+   script.js passes the pointer position in as --mx / --my (pixels) and --px / --py (0 to 1). */
 .service {
+  --art-h: 11rem;
   position: relative;
-  padding-block: 2rem 2.5rem;
-  border-top: 1px solid var(--line);
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* The border is an inset shadow, so the lit border below can sit exactly on top of it */
+  box-shadow: inset 0 0 0 1px var(--line), 0 0 0 0 rgba(0, 0, 0, 0);
+  background: var(--grad) 0 100% / 0 3px no-repeat, var(--bg);
+  transition:
+    transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.4s ease,
+    background-size 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-/* Gradient rule draws across the top on hover */
+.service > * {
+  z-index: 1;
+}
+
+/* Glow under the pointer (behind the text) */
+.service::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    22rem circle at var(--mx, 50%) var(--my, 60%),
+    color-mix(in srgb, var(--g-pink) 16%, transparent),
+    color-mix(in srgb, var(--accent) 10%, transparent) 42%,
+    transparent 72%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* Border that lights up around the pointer: a gradient, cut down to a 1px ring */
 .service::before {
   content: "";
   position: absolute;
-  left: 0;
-  top: -1px;
-  width: 100%;
-  height: 3px;
-  background: var(--grad);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  inset: 0;
+  z-index: 2;
+  padding: 1px;
+  pointer-events: none;
+  background: radial-gradient(
+    14rem circle at var(--mx, 50%) var(--my, 60%),
+    var(--accent-2),
+    var(--g-pink) 38%,
+    var(--accent) 62%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
-.service:hover::before {
-  transform: scaleX(1);
+/* ----- artwork ----- */
+
+.service-art {
+  height: var(--art-h);
+}
+
+/* A still from the hero gradient, a little larger than the panel so it can drift with the pointer */
+.service-art::before {
+  content: "";
+  position: absolute;
+  inset: -8%;
+  transform: translate(calc((var(--px, 0.5) - 0.5) * -18px), calc((var(--py, 0.5) - 0.5) * -18px));
+  transition: transform 0.35s ease-out, scale 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.service:nth-child(1) .service-art::before {
+  background:
+    radial-gradient(ellipse 45% 70% at 80% 45%, var(--c-void) 42%, transparent 100%),
+    radial-gradient(ellipse 80% 60% at 6% 105%, var(--c-pink) 45%, transparent 100%),
+    radial-gradient(ellipse 110% 70% at 42% 112%, var(--c-red) 50%, transparent 100%),
+    radial-gradient(ellipse 60% 80% at 0% 0%, var(--c-teal) 45%, transparent 100%),
+    var(--c-void);
+}
+
+.service:nth-child(2) .service-art::before {
+  background:
+    radial-gradient(ellipse 50% 60% at 78% 12%, var(--c-void) 42%, transparent 100%),
+    radial-gradient(ellipse 60% 60% at 100% 100%, var(--c-red) 42%, transparent 100%),
+    radial-gradient(ellipse 100% 55% at 30% 102%, var(--c-orange) 50%, transparent 100%),
+    var(--c-teal);
+}
+
+.service:nth-child(3) .service-art::before {
+  background:
+    radial-gradient(ellipse 60% 60% at 24% 38%, var(--c-void) 38%, transparent 100%),
+    radial-gradient(ellipse 70% 70% at 100% 42%, var(--c-red) 42%, transparent 100%),
+    radial-gradient(ellipse 90% 70% at 82% 100%, var(--c-orange) 50%, transparent 100%),
+    radial-gradient(ellipse 60% 70% at 58% 0%, var(--c-teal) 46%, transparent 100%),
+    var(--c-void);
+}
+
+/* Fine grid over the artwork, fading out toward the edges */
+.service-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(ellipse 85% 95% at 50% 50%, #000 25%, transparent 100%);
+  mask-image: radial-gradient(ellipse 85% 95% at 50% 50%, #000 25%, transparent 100%);
+}
+
+.service-label {
+  position: absolute;
+  left: 1.25rem;
+  top: 1.1rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.service-num {
+  position: absolute;
+  right: 1.25rem;
+  top: 1rem;
+  font-family: var(--display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.svc-deco {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Cybersecurity: a radar. The sweep turns while the card is hovered. */
+.svc-radar {
+  right: -2.75rem;
+  top: 50%;
+  width: 13.5rem;
+  height: 13.5rem;
+  margin-top: -6.75rem;
+  border-radius: 50%;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)) center / 1px 100% no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)) center / 100% 1px no-repeat,
+    repeating-radial-gradient(circle, transparent 0 1.7rem, rgba(255, 255, 255, 0.24) 1.7rem calc(1.7rem + 1px));
+}
+
+.svc-radar::before {
+  content: "";
+  position: absolute;
+  left: 36%;
+  top: 60%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 2.6rem 1.9rem 0 -1px rgba(255, 255, 255, 0.7), 4.4rem -1.4rem 0 -1px rgba(255, 255, 255, 0.5);
+}
+
+.svc-radar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 70%, rgba(255, 255, 255, 0.36) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: spin 3.2s linear infinite;
+  animation-play-state: paused;
+}
+
+/* Software Development: lines of code that type themselves out */
+.svc-code {
+  right: 1.5rem;
+  top: 50%;
+  width: 52%;
+  max-width: 12.5rem;
+  transform: translateY(-50%);
+  fill: rgba(255, 255, 255, 0.3);
+}
+
+.svc-code .hot {
+  fill: rgba(255, 255, 255, 0.85);
+}
+
+.svc-code rect {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+
+/* Computer Networks: nodes and links that light up */
+.svc-net {
+  right: 0.75rem;
+  top: 0;
+  width: 66%;
+  height: 100%;
+}
+
+.svc-net line {
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1;
+  transition: stroke 0.4s ease;
+}
+
+.svc-net circle {
+  fill: rgba(255, 255, 255, 0.6);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.svc-net .hub {
+  fill: #ffffff;
+}
+
+/* ----- icon badge ----- */
+
+.service-badge {
+  position: absolute;
+  z-index: 3;
+  left: clamp(1.5rem, 2.4vw, 2rem);
+  top: calc(var(--art-h) - 2.25rem);
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  /* a ring in the gradient colors, and a cut-out around it so it looks set into the artwork */
+  background: linear-gradient(var(--bg), var(--bg)) padding-box, var(--grad) border-box;
+  box-shadow: 0 0 0 0.4rem var(--bg);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .service-icon {
   display: block;
-  width: 3rem;
-  height: 3rem;
-  margin-bottom: 1.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   color: var(--accent);
   /* Gradient stroke, defined once in index.html (#accent-grad). Falls back to orange. */
   stroke: url(#accent-grad) var(--accent);
-  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.service:hover .service-icon {
-  transform: translateY(-5px) rotate(-4deg);
+/* Every shape has pathLength="1", so one dash covers it exactly and it can be "drawn" */
+.service-icon * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+/* ----- details ----- */
+
+.service-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 3.25rem clamp(1.5rem, 2.4vw, 2rem) clamp(1.5rem, 2.4vw, 2rem);
 }
 
 .service h3 {
   font-size: 1.6rem;
   letter-spacing: -0.02em;
   line-height: 1.15;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.75rem;
 }
 
 .service p {
@@ -1244,11 +1506,151 @@ h3 {
   color: var(--muted);
 }
 
-.service .service-list {
-  margin-top: 1rem;
+/* Tags sit at the bottom, so cards of different text lengths still line up */
+.service-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+
+.service-tags li {
+  padding: 0.25rem 0.65rem;
+  border: 1px solid var(--line-2);
   font-family: var(--display);
-  font-size: 0.95rem;
+  font-size: 0.82rem;
+  line-height: 1.4;
   color: var(--fg);
+  transition: transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+@keyframes icon-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes code-type {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes node-pulse {
+  50% {
+    transform: scale(1.7);
+    opacity: 0.55;
+  }
+}
+
+@media (hover: hover) {
+  .service:hover {
+    transform: translateY(-6px);
+    box-shadow: inset 0 0 0 1px var(--line), 0 1.5rem 3rem -1.25rem rgba(0, 0, 0, 0.35);
+    background-size: 100% 3px, auto;
+  }
+
+  .service:hover::before,
+  .service:hover::after {
+    opacity: 1;
+  }
+
+  .service:hover .service-art::before {
+    scale: 1.07;
+  }
+
+  .service:hover .service-badge {
+    transform: translateY(-3px);
+  }
+
+  /* The artwork comes alive */
+  .service:hover .svc-radar::after {
+    opacity: 1;
+    animation-play-state: running;
+  }
+
+  .service:hover .svc-code rect {
+    animation: code-type 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  .service:hover .svc-code rect:nth-child(2) { animation-delay: 0.1s; }
+  .service:hover .svc-code rect:nth-child(3) { animation-delay: 0.2s; }
+  .service:hover .svc-code rect:nth-child(4) { animation-delay: 0.3s; }
+  .service:hover .svc-code rect:nth-child(5) { animation-delay: 0.4s; }
+  .service:hover .svc-code rect:nth-child(6) { animation-delay: 0.5s; }
+
+  .service:hover .svc-net line {
+    stroke: rgba(255, 255, 255, 0.7);
+  }
+
+  .service:hover .svc-net circle {
+    animation: node-pulse 1.5s ease-in-out infinite;
+  }
+
+  .service:hover .svc-net circle:nth-of-type(2) { animation-delay: 0.2s; }
+  .service:hover .svc-net circle:nth-of-type(3) { animation-delay: 0.4s; }
+  .service:hover .svc-net circle:nth-of-type(4) { animation-delay: 0.6s; }
+  .service:hover .svc-net circle:nth-of-type(5) { animation-delay: 0.8s; }
+  .service:hover .svc-net circle:nth-of-type(6) { animation-delay: 1s; }
+  .service:hover .svc-net circle:nth-of-type(7) { animation-delay: 1.2s; }
+  .service:hover .svc-net circle:nth-of-type(8) { animation-delay: 1.4s; }
+
+  /* The icon redraws itself, one stroke after another */
+  .service:hover .service-icon * {
+    animation: icon-draw 0.9s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  .service:hover .service-icon *:nth-child(2) { animation-delay: 0.12s; }
+  .service:hover .service-icon *:nth-child(3) { animation-delay: 0.24s; }
+  .service:hover .service-icon *:nth-child(4) { animation-delay: 0.36s; }
+  .service:hover .service-icon *:nth-child(5) { animation-delay: 0.48s; }
+  .service:hover .service-icon *:nth-child(6) { animation-delay: 0.6s; }
+  .service:hover .service-icon *:nth-child(7) { animation-delay: 0.72s; }
+
+  /* Tags lift one after another */
+  .service:hover .service-tags li {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    background-color: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+
+  .service:hover .service-tags li:nth-child(2) { transition-delay: 0.04s; }
+  .service:hover .service-tags li:nth-child(3) { transition-delay: 0.08s; }
+  .service:hover .service-tags li:nth-child(4) { transition-delay: 0.12s; }
+  .service:hover .service-tags li:nth-child(5) { transition-delay: 0.16s; }
+  .service:hover .service-tags li:nth-child(6) { transition-delay: 0.2s; }
+}
+
+/* Cards rise into place as they scroll into view (browsers that support scroll-driven animation) */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .service {
+      animation: service-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+
+    .service:nth-child(2) { animation-range: entry 8% entry 63%; }
+    .service:nth-child(3) { animation-range: entry 16% entry 71%; }
+
+    @keyframes service-in {
+      from {
+        opacity: 0;
+        translate: 0 2.5rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 46rem) {
+  .section-head {
+    grid-template-columns: 1fr;
+  }
+
+  .service {
+    --art-h: 9.5rem;
+  }
 }
 
 /* ---------- Certifications & achievements (slider) ---------- */
@@ -1820,6 +2222,18 @@ h3 {
     animation: none;
   }
 
+  .service:hover .service-icon *,
+  .service:hover .svc-code rect,
+  .service:hover .svc-net circle,
+  .svc-radar::after {
+    animation: none;
+  }
+
+  .service-art::before,
+  .service-badge {
+    transition: none;
+  }
+
   /* No circling highlight: a steady, slightly stronger ring instead */
   .hero-avatar::after {
     display: none;
@@ -1847,8 +2261,12 @@ h3 {
   .carousel-arrow,
   .cert-link svg,
   .quote-dot::after,
+  .service,
   .service::before,
+  .service::after,
   .service-icon,
+  .service-num,
+  .service-tags li,
   .project::after,
   .nav-list a,
   .btn,
