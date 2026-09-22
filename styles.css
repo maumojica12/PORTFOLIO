@@ -565,6 +565,11 @@ h3 {
   color: var(--bg);
 }
 
+/* Buttons inside the photo panel: a focus ring that shows up against the dark canvas */
+.about-art :focus-visible {
+  outline-color: var(--fg);
+}
+
 /* Spotlight: on devices with a mouse, the headline dims and a soft circle
    of full contrast follows the pointer. script.js adds .spot and drives the variables. */
 .hero h1 {
@@ -1056,19 +1061,86 @@ h3 {
 
 /* ---------- About ---------- */
 
+/* The whole About block -- text and photos -- reads as one card: a gradient border all the
+   way around, in the same accent colors used everywhere else. */
 .about-grid {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   gap: 3rem clamp(3rem, 8vw, 7rem);
   align-items: start;
+  padding: clamp(1.75rem, 4vw, 3rem);
+  border: 3px solid transparent;
+  background: linear-gradient(var(--bg), var(--bg)) padding-box, var(--grad) border-box;
 }
 
+/* The description sits in its own bordered box, its text centered top to bottom, with the
+   same pointer-glow and lit-border treatment as the "What I do" cards (script.js drives
+   --mx / --my the same way). */
 .prose {
+  position: relative;
+  isolation: isolate;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   max-width: 38rem;
   font-size: 1.2rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  box-shadow: inset 0 0 0 1px var(--line);
+  transition: box-shadow 0.4s ease;
+}
+
+/* Glow that follows the pointer while hovering the text (behind it) */
+.prose::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    20rem circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--g-pink) 16%, transparent),
+    color-mix(in srgb, var(--accent) 10%, transparent) 42%,
+    transparent 72%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* Border that lights up around the pointer, same technique as the "What I do" cards */
+.prose::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 1px;
+  pointer-events: none;
+  background: radial-gradient(
+    13rem circle at var(--mx, 50%) var(--my, 50%),
+    var(--accent-2),
+    var(--g-pink) 38%,
+    var(--accent) 62%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+@media (hover: hover) {
+  .prose:hover::before,
+  .prose:hover::after {
+    opacity: 1;
+  }
 }
 
 .prose p {
+  position: relative;
+  z-index: 1;
   margin: 0 0 1.25em;
 }
 
@@ -1076,10 +1148,143 @@ h3 {
   margin-bottom: 0;
 }
 
-/* A window onto the same moving gradient, in the space beside the intro text */
+/* A plain, full-bleed square -- one photo at a time, sliding in from whichever side
+   you're moving toward. script.js moves .is-active between them; everything else
+   (the slide, the dots) is plain CSS driven off that one class. */
 .about-art {
-  min-height: 16rem;
-  align-self: stretch;
+  aspect-ratio: 1;
+  align-self: start;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+/* Once the two columns sit side by side, the photo gives up its fixed square shape and
+   stretches to match the description box's height instead -- object-fit still keeps
+   whatever's inside it cropped to fill cleanly, whatever shape that ends up being. */
+@media (min-width: 52.01rem) {
+  .about-art {
+    aspect-ratio: auto;
+    align-self: stretch;
+  }
+}
+
+/* A plain filmstrip slide: no fading, the incoming photo just slides in from whichever
+   side you're moving toward as the outgoing one slides out the other -- the way an
+   actual photo carousel moves, rather than a crossfade. */
+.about-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  visibility: hidden;
+  transform: translateX(100%);
+  /* Belt and braces: the HTML also has draggable="false", but this stops the browser's
+     own "drag this image out" gesture from hijacking a swipe in every engine. */
+  -webkit-user-drag: none;
+  user-select: none;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.45s;
+}
+
+.about-photo:has(~ .about-photo.is-active) {
+  transform: translateX(-100%);
+}
+
+.about-photo.is-active {
+  visibility: visible;
+  transform: none;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s;
+}
+
+/* Small round dots, centered along the bottom of the photo -- no bar behind them,
+   just a soft shadow so they still read against a bright photo. */
+.about-dots {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  bottom: 0.7rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+.about-dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.about-dot.is-active {
+  background: #ffffff;
+  transform: scale(1.25);
+}
+
+/* Arrows only show up for a mouse: white circles at the edges, the way a desktop photo
+   post reveals them on hover. Touch and keyboard use swipe or the dots instead, and the
+   arrows still take focus so a keyboard user can reach and reveal them. */
+.about-arrow {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #262626;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.about-arrow--prev {
+  left: 0.6rem;
+}
+
+.about-arrow--next {
+  right: 0.6rem;
+}
+
+.about-arrow svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.about-art:focus-within .about-arrow {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (hover: hover) {
+  .about-art:hover .about-arrow {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .about-arrow:hover {
+    transform: translateY(-50%) scale(1.08);
+  }
+}
+
+.about-controls[hidden] {
+  display: none;
 }
 
 /* ---------- Experience ---------- */
@@ -2060,11 +2265,9 @@ h3 {
   .about-grid {
     grid-template-columns: 1fr;
   }
+}
 
-  .about-art {
-    min-height: 11rem;
-  }
-
+@media (max-width: 52rem) {
   .timeline > li {
     grid-template-columns: 1fr;
   }
@@ -2270,7 +2473,13 @@ h3 {
   .project::after,
   .nav-list a,
   .btn,
-  .hero-links a {
+  .hero-links a,
+  .about-photo,
+  .about-dot,
+  .about-arrow,
+  .prose,
+  .prose::before,
+  .prose::after {
     transition: none;
   }
 }

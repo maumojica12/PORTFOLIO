@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- EDIT: page title and description (shown in browser tabs and search results) -->
-  <title>Your Name, web developer</title>
-  <meta name="description" content="Portfolio of Your Name, a web developer who builds fast, accessible websites and web apps.">
-
+  <title>Maurienne Mojica - PORTFOLIO</title>
+ 
   <!-- EDIT: replace the URL with your GitHub Pages address -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Your Name, web developer">
@@ -263,21 +262,24 @@
       </div>
     </section>
 
-    <!-- ABOUT -->
+<!-- ABOUT -->
     <section class="section" id="about" aria-labelledby="about-title">
       <div class="wrap">
         <h2 id="about-title">About Me</h2>
-
+ 
         <div class="about-grid">
           <div class="prose">
-            <!-- EDIT: write in the first person, keep it short -->
-            <p>I'm a web developer with six years of experience building products for startups and small businesses. I care about pages that work on slow connections, on small screens, and with a keyboard.</p>
-            <p>I like working close to design, turning a rough sketch into something people can use. Outside of work I run, take film photos, and cook too much food on Sundays.</p>
+            <p align="justify">I&rsquo;m a driven Computer Science undergraduate at De La Salle University - Manila with a growing interest in Networking, Cybersecurity and Frontend Development. I enjoy building, exploring how systems work, and solving technical problems while continuously learning new technologies. I&rsquo;m adaptable, collaborative, and motivated by challenges that allow me to grow both technically and personally.</p>
+            <p align="justify">Outside of tech, I enjoy traveling, food trips, outdoor activities, driving, music, and sports. These interests keep me curious, active, and open to new experiences.</p>
           </div>
-
-          <!-- Decorative: the same moving gradient as the hero. Delete this block to remove it. -->
-          <div class="about-art" aria-hidden="true">
-            <div class="hero-bg">
+ 
+          <!-- A plain square photo, one at a time -- slides to the next on its own every 4.5s;
+               pauses while hovered or scrolled out of view. Arrows appear on hover (desktop);
+               the dots, the left/right arrow keys and swiping all work everywhere.
+               EDIT: give each photo real alt text once you know what it shows,
+               e.g. alt="Hiking in Batanes" -- empty alt is fine meanwhile. -->
+          <div class="about-art" role="region" aria-roledescription="carousel" aria-label="A few photos">
+            <div class="hero-bg" aria-hidden="true">
               <span class="blob b-teal"></span>
               <span class="blob b-orange"></span>
               <span class="blob b-red"></span>
@@ -285,10 +287,29 @@
               <span class="blob b-void"></span>
               <span class="blob b-cream"></span>
             </div>
+            <img class="about-photo is-active" src="abt1.jpg" alt="" loading="lazy" decoding="async" draggable="false">
+            <img class="about-photo" src="abt2.jpg" alt="" loading="lazy" decoding="async" draggable="false">
+            <img class="about-photo" src="abt3.jpg" alt="" loading="lazy" decoding="async" draggable="false" style="object-position: 80% 25%">
+            <img class="about-photo" src="abt4.jpeg" alt="" loading="lazy" decoding="async" draggable="false">
+            <div class="about-controls">
+              <button class="about-arrow about-arrow--prev" type="button" aria-label="Previous photo">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="15 6 9 12 15 18"/></svg>
+              </button>
+              <button class="about-arrow about-arrow--next" type="button" aria-label="Next photo">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="9 6 15 12 9 18"/></svg>
+              </button>
+              <div class="about-dots" role="group" aria-label="Photo">
+                <button class="about-dot is-active" type="button" aria-label="Show photo 1 of 4"></button>
+                <button class="about-dot" type="button" aria-label="Show photo 2 of 4"></button>
+                <button class="about-dot" type="button" aria-label="Show photo 3 of 4"></button>
+                <button class="about-dot" type="button" aria-label="Show photo 4 of 4"></button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
+ 
 
     <!-- WORK -->
     <section class="section" id="work" aria-labelledby="work-title">

@@ -150,11 +150,12 @@
   })();
 
   /* ------------------------------------------------------------------
-     3b. Service cards (mouse and pen only)
-     The glow and the lit border follow the pointer across a card, and the artwork drifts a little with it.
+     3b. Service cards, and the About description box (mouse and pen only)
+     The glow and the lit border follow the pointer across each one; the service
+     cards' artwork also drifts a little with it.
      ------------------------------------------------------------------ */
-  (function services() {
-    var cards = Array.prototype.slice.call(document.querySelectorAll(".service"));
+  (function glowBoxes() {
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".service, .prose"));
     var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (!cards.length || !canHover || reduceMotion.matches) return;
 
@@ -175,6 +176,143 @@
         card.style.setProperty("--py", "0.5");
       });
     });
+  })();
+
+  /* ------------------------------------------------------------------
+     3c. About photos: a small stack that reshuffles itself, one photo at a time,
+     via the arrows, the dots, the left / right arrow keys, or a swipe. It advances
+     on its own too, unless the pointer is over it, it's scrolled out of view, or
+     reduced motion is on -- and a photo file that doesn't exist yet (about-1.jpg
+     etc. not added) is dropped, along with its dot, instead of leaving a gap.
+     ------------------------------------------------------------------ */
+  (function aboutPhotos() {
+    var box = document.querySelector(".about-art");
+    if (!box) return;
+
+    var dotEls = box.querySelectorAll(".about-dot");
+    var pairs = Array.prototype.slice.call(box.querySelectorAll(".about-photo")).map(function (photo, i) {
+      return { photo: photo, dot: dotEls[i] || null };
+    });
+    if (!pairs.length) return;
+
+    var controls = box.querySelector(".about-controls");
+    var prevBtn = box.querySelector(".about-arrow--prev");
+    var nextBtn = box.querySelector(".about-arrow--next");
+    var countNow = box.querySelector(".about-count .now");
+    var countTotal = box.querySelector(".about-count .total");
+
+    var DELAY = 4500;
+    var timer = null;
+    var inView = true;
+    var hovering = false;
+
+    function pad(n) {
+      return n < 10 ? "0" + n : String(n);
+    }
+
+    function currentIndex() {
+      for (var i = 0; i < pairs.length; i++) {
+        if (pairs[i].photo.classList.contains("is-active")) return i;
+      }
+      return 0;
+    }
+
+    function show(i) {
+      if (!pairs.length) return;
+      var idx = ((i % pairs.length) + pairs.length) % pairs.length;
+      pairs.forEach(function (pair, j) {
+        pair.photo.classList.toggle("is-active", j === idx);
+        if (pair.dot) pair.dot.classList.toggle("is-active", j === idx);
+      });
+      if (countNow) countNow.textContent = pad(idx + 1);
+    }
+
+    function stop() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+
+    function start() {
+      stop();
+      timer = setInterval(function () { show(currentIndex() + 1); }, DELAY);
+    }
+
+    // Whichever of hovering / off-screen / reduced motion applies, the slideshow stops;
+    // otherwise it runs. Safe to call as often as needed.
+    function sync() {
+      if (inView && !hovering && !reduceMotion.matches && pairs.length > 1) start();
+      else stop();
+    }
+
+    // A manual move (arrow, dot, key, swipe) shows the photo and restarts the timer,
+    // so the next automatic move is a full DELAY away rather than arriving right after.
+    function goTo(i) {
+      show(i);
+      sync();
+    }
+
+    function step(dir) {
+      goTo(currentIndex() + dir);
+    }
+
+    function showControls() {
+      if (!controls) return;
+      controls.hidden = pairs.length < 2;
+    }
+
+    pairs.slice().forEach(function (pair) {
+      pair.photo.addEventListener("error", function () {
+        var wasActive = pair.photo.classList.contains("is-active");
+        var at = pairs.indexOf(pair);
+        if (at === -1) return;
+        pairs.splice(at, 1);
+        pair.photo.remove();
+        if (pair.dot) pair.dot.remove();
+        if (countTotal) countTotal.textContent = pad(pairs.length);
+        showControls();
+        if (!pairs.length) { stop(); return; }
+        show(wasActive ? at % pairs.length : currentIndex());
+        sync();
+      }, { once: true });
+
+      if (pair.dot) {
+        pair.dot.addEventListener("click", function () { goTo(pairs.indexOf(pair)); });
+      }
+    });
+
+    if (prevBtn) prevBtn.addEventListener("click", function () { step(-1); });
+    if (nextBtn) nextBtn.addEventListener("click", function () { step(1); });
+
+    box.addEventListener("keydown", function (e) {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.preventDefault();
+      step(e.key === "ArrowRight" ? 1 : -1);
+    });
+
+    // Swipe: a sideways drag of more than 50px. Clicking a dot or arrow moves the
+    // pointer only a few pixels, so it never counts as a swipe too.
+    var startX = null;
+    box.addEventListener("pointerdown", function (e) { startX = e.clientX; });
+    box.addEventListener("pointerup", function (e) {
+      if (startX === null) return;
+      var dx = e.clientX - startX;
+      startX = null;
+      if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+    });
+    box.addEventListener("pointercancel", function () { startX = null; });
+
+    box.addEventListener("pointerenter", function () { hovering = true; sync(); });
+    box.addEventListener("pointerleave", function () { hovering = false; sync(); });
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        inView = entries[0].isIntersecting;
+        sync();
+      }, { threshold: 0.2 }).observe(box);
+    }
+
+    showControls();
+    show(0);
+    sync();
   })();
 
   /* ------------------------------------------------------------------
