@@ -1289,34 +1289,145 @@ h3 {
 
 /* ---------- Experience ---------- */
 
+/* The whole list sits in a gradient-bordered card, same treatment as the About block. A rail
+   runs down the left, always shown in the gradient -- in browsers that support scroll-driven
+   animation, it draws itself in as you scroll, and each row rises into place behind it. */
+.timeline {
+  position: relative;
+  padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.5rem, 3vw, 2.25rem) clamp(1.5rem, 3vw, 2.25rem) 5.5rem;
+  border: 3px solid transparent;
+  background: linear-gradient(var(--bg), var(--bg)) padding-box, var(--grad) border-box;
+}
+
+/* The rail fades from full color at the top (the most recent role) down to transparent at
+   the bottom (the oldest) -- a literal "most recent to least" reading of the list, in the
+   same accent colors used everywhere else. A soft light travels down it on a loop. */
+.timeline::after {
+  content: "";
+  position: absolute;
+  left: 1.5rem;
+  top: 2.35rem;
+  bottom: 2.35rem;
+  width: 3px;
+  transform-origin: top;
+  filter: drop-shadow(0 0 4px rgba(255, 150, 60, 0.55));
+  background-image:
+    linear-gradient(to bottom, transparent, #ffffff 40%, #ffffff 58%, transparent 78%),
+    linear-gradient(to bottom, var(--accent) 0%, var(--g-red) 25%, var(--g-pink) 50%, var(--accent-2) 75%, transparent 100%);
+  background-size: 100% 60%, 100% 100%;
+  background-repeat: no-repeat, no-repeat;
+  background-position: 0 -75%, 0 0;
+}
+
+/* Hovering a row fills it with a solid, opaque tint of the accent color and pops it up into
+   a small floating card -- a crisp, solid-edged shadow rather than a soft diffuse one, so it
+   reads clearly as lifted in both light and dark mode. */
 .timeline > li {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 13.5rem) minmax(0, 1fr);
   gap: 0.5rem 2rem;
   padding-block: 1.75rem;
   border-top: 1px solid var(--line);
+  transition: background-color 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s ease;
 }
 
-.timeline > li:last-child {
-  border-bottom: 1px solid var(--line);
+@media (hover: hover) {
+  .timeline > li:hover {
+    position: relative;
+    z-index: 2;
+    background-color: color-mix(in srgb, var(--accent) 9%, var(--bg));
+    transform: translateY(-0.5rem);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--fg) 22%, transparent),
+      0 0.85rem 1.5rem -0.2rem color-mix(in srgb, var(--fg) 55%, transparent);
+  }
+
+  .timeline > li:hover .when {
+    color: var(--accent-ink);
+  }
+
+  .timeline > li:hover .timeline-org {
+    color: var(--accent);
+  }
+
+  .timeline > li:hover .timeline-org-icon *,
+  .timeline > li:hover .timeline-loc-icon * {
+    animation: icon-draw 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  .timeline > li:hover .timeline-list li {
+    transform: translateX(0.35rem);
+    color: var(--fg);
+  }
+
+  .timeline > li:hover .timeline-list li:nth-child(2) { transition-delay: 0.05s; }
+  .timeline > li:hover .timeline-list li:nth-child(3) { transition-delay: 0.1s; }
+  .timeline > li:hover .timeline-list li:nth-child(4) { transition-delay: 0.15s; }
+}
+
+/* The rail draws downward as the card scrolls into view (its own gradient-fade background
+   travels with it), and each row rises and fades in behind it, one after another. Once drawn,
+   a soft light keeps looping down the rail on its own. Browsers without scroll-driven
+   animation just see the rail and every row in place already -- nothing is hidden waiting on it. */
+@media (prefers-reduced-motion: no-preference) {
+  .timeline::after {
+    animation: timeline-shimmer 3.5s ease-in-out infinite;
+  }
+
+  @keyframes timeline-shimmer {
+    0% {
+      background-position: 0 -75%, 0 0;
+    }
+
+    100% {
+      background-position: 0 175%, 0 0;
+    }
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .timeline::after {
+      animation: timeline-rail-draw linear both, timeline-shimmer 3.5s ease-in-out infinite;
+      animation-timeline: view(), auto;
+      animation-range: entry 10% cover 75%, normal;
+    }
+
+    .timeline > li {
+      animation: timeline-row-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 45%;
+    }
+
+    @keyframes timeline-rail-draw {
+      from {
+        transform: scaleY(0);
+      }
+    }
+
+    @keyframes timeline-row-in {
+      from {
+        opacity: 0;
+        translate: 0 1.5rem;
+      }
+    }
+  }
 }
 
 .when {
   margin: 0;
+  padding-left: 1.5rem;
   font-family: var(--display);
   font-weight: 500;
   color: var(--muted);
+  transition: color 0.35s ease;
 }
 
-.when.is-current::before {
-  content: "";
-  display: inline-block;
-  width: 0.7rem;
-  height: 0.7rem;
-  margin-right: 0.6rem;
-  border-radius: 50%;
-  background: var(--orb);
-  vertical-align: 0.02em;
+/* The still-current role stays picked out even without hovering it */
+.when.is-current {
+  font-weight: 700;
+  color: var(--accent-ink);
 }
 
 .timeline h3 {
@@ -1330,6 +1441,83 @@ h3 {
   margin: 0;
   max-width: 42rem;
   color: var(--muted);
+}
+
+/* Organization and location, in place of (or above) the description */
+/* Organization: bold, a size up from the location line, and colored so it reads as the
+   second-most important thing on the row after the job title itself. */
+/* Organization and location share one line. The organization is bold and full-contrast --
+   never a muted grey -- and brightens further to the accent color on hover; the location
+   stays a size down and muted, so it's still clearly secondary despite the shared row. */
+.timeline-org {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.7rem;
+  margin: 0.3rem 0 0;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  transition: color 0.35s ease;
+}
+
+.timeline-loc {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: normal;
+  color: var(--muted);
+}
+
+.timeline-org-icon,
+.timeline-loc-icon {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Every shape has pathLength="1" in the HTML, so one dash covers it exactly and it can
+   be "drawn" -- the same technique as the "What I do" card icons. */
+.timeline-org-icon *,
+.timeline-loc-icon * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+/* Bullet points, marked with the same small rotated diamond used in the skills band */
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.75rem 0 0;
+  max-width: 42rem;
+  color: var(--muted);
+}
+
+.timeline-list li {
+  position: relative;
+  padding-left: 1.1rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.timeline-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 0.4rem;
+  height: 0.4rem;
+  background: var(--accent);
+  transform: rotate(45deg);
 }
 
 /* ---------- Contact ---------- */
@@ -2271,6 +2459,15 @@ h3 {
   .timeline > li {
     grid-template-columns: 1fr;
   }
+
+  /* Less room given to the rail on a narrow screen */
+  .timeline {
+    padding-left: 3.25rem;
+  }
+
+  .timeline::after {
+    left: 0.9rem;
+  }
 }
 
 @media (max-width: 46rem) {
@@ -2432,6 +2629,11 @@ h3 {
     animation: none;
   }
 
+  .timeline > li:hover .timeline-org-icon *,
+  .timeline > li:hover .timeline-loc-icon * {
+    animation: none;
+  }
+
   .service-art::before,
   .service-badge {
     transition: none;
@@ -2479,7 +2681,11 @@ h3 {
   .about-arrow,
   .prose,
   .prose::before,
-  .prose::after {
+  .prose::after,
+  .timeline > li,
+  .when,
+  .timeline-org,
+  .timeline-list li {
     transition: none;
   }
 }
