@@ -301,8 +301,7 @@ h3 {
    ========================================================================== */
 
 /* The hero and the contact panel are dark canvases in both light and dark mode, so white text
-   stays readable over the deep blues and blacks of the gradient. The page opens and closes on
-   the same moving gradient; everything in between follows the theme. */
+   stays readable over the deep blues and blacks of the gradient. */
 .hero,
 .section--contact,
 .about-art,
@@ -1522,61 +1521,124 @@ h3 {
 
 /* ---------- Contact ---------- */
 
-.contact-lead {
-  margin: 0 0 1.5rem;
-  max-width: 34rem;
-  color: var(--muted);
-}
-
-.big-mail {
-  display: inline-block;
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: clamp(1.6rem, 0.6rem + 5.6vw, 5.5rem);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  text-decoration-thickness: 0.05em;
-  text-underline-offset: 0.14em;
-  overflow-wrap: anywhere;
-}
-
-.big-mail:hover {
-  text-decoration-thickness: 0.1em;
-}
-
-.copy-row {
+/* Two plain lists side by side -- contact methods, and a small site map -- collapsing to one
+   column on narrow screens. Nothing fancier than that; the links use the site's normal
+   underline-on-hover treatment. */
+/* Icon on top, a small tracked label, then the actual value underneath -- one column per
+   contact method, wrapping to fewer columns as the screen narrows. */
+/* Each contact method is its own column -- icon beside the text, the way it was -- with the
+   columns sitting side by side and wrapping to fewer per row as the screen narrows. */
+/* Four plain icon buttons in a single row -- no visible labels, since these get their real
+   hrefs filled in by hand. Same circle-and-fill treatment as the hero's account icons, so the
+   two bookend each other. */
+/* Each contact method: a circular icon badge, then the actual link text underneath, filled
+   in by hand. The whole column is the click target, and generously spaced so four of them
+   never feel cramped, wrapping to fewer per row as the screen narrows. */
+/* Each contact method: a circular icon badge, then the actual link text underneath, filled
+   in by hand, kept to a single line -- the whole column is the click target, but only the
+   icon reacts to hover, not the text. Wraps to fewer per row as the screen narrows. */
+.contact-cols {
   display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  margin: 1.25rem 0 0;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem clamp(1.5rem, 4vw, 3rem);
+  margin: clamp(2rem, 5vw, 3rem) auto 0;
 }
 
-.copy-btn {
-  padding: 0;
-  border: 0;
-  background: none;
+.contact-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
   color: var(--fg);
+  text-decoration: none;
+}
+
+.contact-col-icon-ring {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.contact-col:hover .contact-col-icon-ring {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+  transform: translateY(-3px);
+  box-shadow: 0 0.6rem 1.25rem rgba(0, 0, 0, 0.3);
+}
+
+.contact-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.contact-col-text {
   font-family: var(--display);
-  font-weight: 500;
-  font-size: 1rem;
-  text-decoration: underline;
-  text-underline-offset: 0.18em;
-  text-decoration-thickness: 0.06em;
-  cursor: pointer;
-}
-
-.copy-btn {
-  text-decoration-color: var(--accent);
-}
-
-.copy-btn:hover {
-  color: var(--accent-ink);
-  text-decoration-thickness: 0.14em;
-}
-
-.copy-status {
-  color: var(--accent-2);
   font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Without this, the text would inherit the site's usual a:hover color change from its
+   parent link -- pinning it here keeps it looking exactly the same whether hovered or not. */
+.contact-col:hover .contact-col-text {
+  color: var(--fg);
+}
+
+/* Dark canvas and moving gradient shared with the hero (see above). The gradient layers sit in
+   a .hero-bg inside the section, mirrored left to right so it doesn't look like a copy, and the
+   content is vertically centered in a tall block so the gradient still has room to read. */
+.section--contact {
+  --muted: rgba(255, 255, 255, 0.94);
+  --line: rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: clamp(20rem, 40vh, 28rem);
+  border-top: 0;
+  text-align: center;
+}
+
+/* The short bar above the heading is a fixed-width block, so centering the section's text
+   doesn't center it on its own -- it needs its own auto side margins. The heading itself
+   goes bigger than the site's usual section heading, with a soft shadow so it stays legible
+   against whichever part of the moving gradient sits behind it. */
+.section--contact h2::before {
+  width: 4rem;
+  height: 5px;
+  margin-inline: auto;
+}
+
+.section--contact h2 {
+  font-size: clamp(2.5rem, 1.6rem + 4vw, 4.5rem);
+  text-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.35);
+}
+
+.section--contact .hero-bg {
+  transform: scaleX(-1);
+}
+
+.section--contact a {
+  text-decoration-color: var(--fg);
+}
+
+.section--contact :focus-visible {
+  outline-color: var(--fg);
+}
+
+.section--contact ::selection {
+  background: var(--fg);
+  color: var(--bg);
 }
 
 /* ---------- Services ---------- */
@@ -2331,58 +2393,6 @@ h3 {
   }
 }
 
-/* ---------- Contact: gradient canvas ---------- */
-
-/* Dark canvas and moving gradient shared with the hero (see above). The gradient layers sit in
-   a .hero-bg inside the section, mirrored left to right so it doesn't look like a copy. */
-.section--contact {
-  --muted: rgba(255, 255, 255, 0.94);
-  --line: rgba(255, 255, 255, 0.3);
-  border-top: 0;
-}
-
-.section--contact .hero-bg {
-  transform: scaleX(-1);
-}
-
-.section--contact a {
-  text-decoration-color: var(--fg);
-}
-
-.section--contact a:hover,
-.section--contact .copy-btn:hover {
-  color: var(--fg);
-}
-
-.section--contact :focus-visible {
-  outline-color: var(--fg);
-}
-
-.section--contact ::selection {
-  background: var(--fg);
-  color: var(--bg);
-}
-
-.section--contact .big-mail {
-  padding-inline: 0.1em;
-  margin-inline: -0.1em;
-}
-
-.section--contact .big-mail:hover {
-  background: var(--fg);
-  color: var(--bg);
-  text-decoration: none;
-}
-
-.section--contact .copy-btn {
-  color: var(--fg);
-  text-decoration-color: var(--fg);
-}
-
-.section--contact .copy-status {
-  color: var(--fg);
-}
-
 /* ==========================================================================
    Footer
    ========================================================================== */
@@ -2398,6 +2408,7 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
   gap: 0.5rem 1.5rem;
 }
 
