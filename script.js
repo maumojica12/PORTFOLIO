@@ -445,6 +445,97 @@
   })();
 
   /* ------------------------------------------------------------------
+     4c. Certification details pop-up: fills the shared <dialog> from
+     whichever card's "See details" button was clicked, using that
+     card's own photo/title/text plus the button's own longer write-up.
+     ------------------------------------------------------------------ */
+    (function certModal() {
+    var dialog = document.getElementById("cert-modal");
+    var triggers = Array.prototype.slice.call(document.querySelectorAll(".cert-link"));
+    if (!dialog || !triggers.length) return;
+ 
+    var imgEl = dialog.querySelector(".cert-modal-img");
+    var typeEl = dialog.querySelector(".cert-modal-type");
+    var titleEl = dialog.querySelector(".cert-modal-title");
+    var metaEl = dialog.querySelector(".cert-modal-meta");
+    var descEl = dialog.querySelector(".cert-modal-desc");
+    var detailEl = dialog.querySelector(".cert-modal-detail");
+    var closeBtn = dialog.querySelector(".cert-modal-close");
+ 
+    function setText(el, text) {
+      if (el) el.textContent = text || "";
+    }
+ 
+    // If the photo file is missing, hide the <img> so the gradient placeholder shows instead.
+    if (imgEl) {
+      imgEl.addEventListener("error", function () {
+        imgEl.hidden = true;
+      });
+    }
+ 
+    triggers.forEach(function (trigger) {
+      trigger.addEventListener("click", function () {
+        var card = trigger.closest(".cert");
+        if (!card) return;
+ 
+        var type = card.querySelector(".cert-type");
+        var title = card.querySelector("h3");
+        var meta = card.querySelector(".cert-meta");
+        var desc = card.querySelector(".cert-desc");
+        setText(typeEl, type && type.textContent);
+        setText(titleEl, title && title.textContent);
+        setText(metaEl, meta && meta.textContent);
+        setText(descEl, desc && desc.textContent);
+ 
+        // Pop-up photo: its own file, set on the button with data-cert-image.
+        var src = trigger.getAttribute("data-cert-image");
+        if (imgEl) {
+          if (src) {
+            imgEl.alt = trigger.getAttribute("data-cert-image-alt") ||
+              ((title && title.textContent) ? title.textContent + " certificate" : "");
+            imgEl.hidden = false;
+            imgEl.src = src;
+          } else {
+            imgEl.hidden = true;
+            imgEl.removeAttribute("src");
+            imgEl.alt = "";
+          }
+        }
+ 
+          var detail = trigger.getAttribute("data-cert-detail");
+        if (detailEl) {
+          detailEl.innerHTML = detail || "";
+          detailEl.hidden = !detail;
+        }
+
+        dialog.showModal();
+      });
+    });
+ 
+    // Moving gradient: the glow and lit border in the description box follow the pointer
+    // (mouse and pen only, and not with reduced motion).
+    var textBox = dialog.querySelector(".cert-modal-text");
+    var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (textBox && canHover && !reduceMotion.matches) {
+      textBox.addEventListener("pointermove", function (e) {
+        var box = textBox.getBoundingClientRect();
+        textBox.style.setProperty("--mx", (e.clientX - box.left) + "px");
+        textBox.style.setProperty("--my", (e.clientY - box.top) + "px");
+      });
+    }
+ 
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function () { dialog.close(); });
+    }
+ 
+    // Clicking the backdrop (the dialog element itself, outside its content) closes it
+    dialog.addEventListener("click", function (e) {
+      if (e.target === dialog) dialog.close();
+    });
+  })();
+ 
+
+  /* ------------------------------------------------------------------
      5. Copy email address
      ------------------------------------------------------------------ */
   (function copyEmail() {

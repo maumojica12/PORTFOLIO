@@ -408,30 +408,56 @@
           </button>
  
           <div class="quotes">
+ 
             <figure class="quote cert is-active">
-              <div class="cert-art" aria-hidden="true">
-                <!-- Optional: <img src="certificate-1.jpg" alt=""> covers the gradient with a picture of the certificate -->
-                <span class="cert-icon"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span>
+              <div class="cert-art" style="--fx: -1" aria-hidden="true">
+                <span class="cert-icon"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
+                <img src="isc2-1.png" alt="" onerror="this.remove()">
               </div>
               <figcaption class="cert-body">
-                <p class="cert-type">Certification</p>
-                <h3>Certification Name</h3>
-                <p class="cert-meta">Issuing Organization · Month 2026</p>
-                <p class="cert-desc">What it covers and the skills it proves, in one or two lines.</p>
-                <a class="cert-link" href="https://example.com/credential" rel="noopener">View credential <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+                <p class="cert-type">Achievement</p>
+                <h3>ISC2 Certified in Cybersecurity (CC)</h3>
+                <p class="cert-meta">International Information System Security Certification Consortium</p>
+                <p class="cert-desc">Passed the examination on March 23, 2026.</p>
+                <!-- data-cert-image = the photo shown in the pop-up. It is a different file from the
+                     card's own picture above (isc2-1.png). -->
+                <button
+                  class="cert-link"
+                  type="button"
+                  data-cert-image="isc2-2.jpg"
+                  data-cert-image-alt="ISC2 Certified in Cybersecurity certificate"
+                  data-cert-detail="<p>The ISC2 Certified in Cybersecurity (CC) exam covers the foundational knowledge and skills needed to begin a career in cybersecurity, including:</p><ul><li>Security Principles</li><li>Business Continuity, Disaster Recovery &amp; Incident Response</li><li>Access Controls</li><li>Network Security</li><li>Security Operations</li></ul><p>It focuses on basic cybersecurity concepts, threats, risk management, security controls, and incident handling.</p>"
+                >
+                  See details
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
               </figcaption>
             </figure>
  
             <figure class="quote cert">
-              <div class="cert-art" style="--fx: -1" aria-hidden="true">
-                <span class="cert-icon"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
+              <div class="cert-art" aria-hidden="true">
+                <span class="cert-icon">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <polyline points="9 12 11 14 15 10"/>
+                  </svg>
+                </span>
+
+                <img src="cert-analyst.png" alt="">
               </div>
+
               <figcaption class="cert-body">
-                <p class="cert-type">Achievement</p>
-                <h3>Achievement or Award Title</h3>
-                <p class="cert-meta">Event or School · 2026</p>
-                <p class="cert-desc">What you did and why it mattered, in one or two lines.</p>
-                <a class="cert-link" href="https://example.com/details" rel="noopener">See details <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+                <p class="cert-type">Certification</p>
+
+                <h3>Certified DLSU OffSec Vulnerability Analyst</h3>
+
+                <p class="cert-meta">
+                  De La Salle University – Manila
+                </p>
+
+                <p class="cert-desc">
+                  Certification focused on offensive security and vulnerability analysis.
+                </p>
               </figcaption>
             </figure>
  
@@ -444,7 +470,15 @@
                 <h3>Another Certification</h3>
                 <p class="cert-meta">Issuing Organization · Month 2025</p>
                 <p class="cert-desc">What it covers and the skills it proves, in one or two lines.</p>
-                <a class="cert-link" href="https://example.com/credential" rel="noopener">View credential <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+                <!-- EDIT: add data-cert-image="your-file.png" for this pop-up's photo. -->
+                <button
+                  class="cert-link"
+                  type="button"
+                  data-cert-detail="EDIT: add a longer paragraph here about this certification."
+                >
+                  View credential
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
               </figcaption>
             </figure>
           </div>
@@ -461,6 +495,37 @@
         </div>
       </div>
     </section>
+ 
+    <!-- Shared details pop-up: one dialog, filled in by script.js for whichever card was clicked.
+         The zoom link is gone, the close button is at the pop-up's upper right, and the description
+         sits in .cert-modal-text (the box with the moving gradient). -->
+    <dialog class="cert-modal" id="cert-modal" aria-labelledby="cert-modal-title">
+      <!-- Close button: upper right of the pop-up -->
+      <button class="cert-modal-close" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+      </button>
+      <div class="cert-modal-inner">
+        <div class="cert-modal-media">
+          <div class="cert-modal-art">
+            <div class="cert-modal-placeholder" aria-hidden="true">
+              <svg class="cert-modal-placeholder-icon" viewBox="0 0 24 24" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <img class="cert-modal-img" src="" alt="" hidden>
+          </div>
+        </div>
+        <div class="cert-modal-body">
+          <p class="cert-modal-type"></p>
+          <h3 class="cert-modal-title" id="cert-modal-title"></h3>
+          <p class="cert-modal-meta"></p>
+          <!-- Description box: gets the moving gradient on hover -->
+          <div class="cert-modal-text">
+            <p class="cert-modal-desc"></p>
+            <div class="cert-modal-detail" hidden></div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+ 
 
    <!-- EXPERIENCE -->
     <section class="section" id="experience" aria-labelledby="experience-title">
